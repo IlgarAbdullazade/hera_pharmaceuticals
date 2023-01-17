@@ -1,0 +1,36 @@
+html,
+body {
+  @apply h-full;
+}
+
+body {
+  @apply min-w-[360px] bg-bgPrimary font-primary text-sm font-normal text-textPrimary antialiased;
+}
+
+[class*="-ibg"] {
+  @apply relative;
+  img {
+    @apply absolute top-0 left-0 h-full w-full object-cover;
+  }
+}
+[class*="-ibg-contain"] {
+  img {
+    @apply absolute top-0 left-0 h-full w-full object-contain;
+  }
+}
+
+.wrapper {
+  @apply relative flex min-h-full flex-col overflow-hidden;
+
+  > main {
+    @apply flex-auto;
+  }
+
+  > * {
+    @apply min-w-0;
+  }
+}
+
+[class*="__container"] {
+  @apply container;
+}

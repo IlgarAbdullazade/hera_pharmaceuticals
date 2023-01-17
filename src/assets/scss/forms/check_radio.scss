@@ -1,0 +1,18 @@
+[type="checkbox"],
+[type="radio"] {
+  @apply h-5 w-5 rounded-full border-bgPrimary bg-bgPrimary text-primary focus:ring-0;
+}
+
+.check-radio {
+  // .check-radio__label
+
+  &__label {
+    @apply cursor-pointer text-textSecondary;
+  }
+
+  // .check-radio__input
+
+  &__input {
+    @apply mr-2;
+  }
+}

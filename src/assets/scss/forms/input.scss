@@ -1,0 +1,10 @@
+.input {
+  @apply w-full appearance-none rounded-full border-none bg-bgPrimary py-3.5 px-7 text-sm transition-colors placeholder:text-textSecondary focus:text-primary focus:outline-none focus:ring-0;
+  &:disabled {
+    @apply opacity-80;
+  }
+}
+
+textarea {
+  @apply h-auto resize-none;
+}
