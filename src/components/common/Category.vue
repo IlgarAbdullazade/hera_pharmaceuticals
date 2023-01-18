@@ -17,13 +17,8 @@
 </template>
 
 <script>
-import HeraCaption from "@/components/UI/Caption.vue";
-
 export default {
   name: "HeraCategory",
-  components: {
-    HeraCaption,
-  },
 };
 </script>
 

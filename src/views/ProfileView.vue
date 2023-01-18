@@ -12,7 +12,6 @@
 </template>
 <script>
 import HeraProfileSidebar from "@/components/profile/ProfileSidebar.vue";
-
 export default {
   name: "ProfileView",
   components: {

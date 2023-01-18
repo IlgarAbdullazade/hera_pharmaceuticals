@@ -34,11 +34,10 @@
 
 <script>
 import { Icon } from "@iconify/vue";
-
 import HeraParagraph from "@/components/UI/Paragraph.vue";
 
 export default {
-  name: "CartView",
+  name: "PaymentView",
   components: {
     Icon,
     HeraParagraph,

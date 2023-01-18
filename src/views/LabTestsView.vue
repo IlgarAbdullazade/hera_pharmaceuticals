@@ -3,15 +3,7 @@
     <div class="labtests__container">
       <div class="labtests__wrapper">
         <hera-category class="labtests__category" />
-        <div class="labtests__content">
-          <hera-lab-test-item class="labtests__item" />
-          <hera-lab-test-item class="labtests__item" />
-          <hera-lab-test-item class="labtests__item" />
-          <hera-lab-test-item class="labtests__item" />
-          <hera-lab-test-item class="labtests__item" />
-          <hera-lab-test-item class="labtests__item" />
-          <hera-lab-test-item class="labtests__item" />
-        </div>
+        <hera-lab-test-list class="labtests__content" />
       </div>
     </div>
   </div>
@@ -19,13 +11,13 @@
 
 <script>
 import HeraCategory from "@/components/common/Category.vue";
-import HeraLabTestItem from "@/components/labtests/LabTestItem.vue";
+import HeraLabTestList from "@/components/labtests/LabTestList.vue";
 
 export default {
-  name: "ShopView",
+  name: "LabTestsView",
   components: {
     HeraCategory,
-    HeraLabTestItem,
+    HeraLabTestList,
   },
 };
 </script>
@@ -51,37 +43,11 @@ export default {
   // .labtests__content
 
   &__content {
-    @apply flex flex-col gap-5;
   }
 
   // .labtests__item
 
   &__item {
-  }
-}
-.labtests-item {
-  @apply rounded-3xl bg-white p-2;
-  // .labtests-item__wrapper
-
-  &__wrapper {
-    @apply flex items-center gap-5 rounded-3xl bg-bgPrimary p-3;
-  }
-
-  // .labtests-item__image
-
-  &__image {
-    @apply aspect-square w-20 shrink-0 overflow-hidden rounded-3xl;
-  }
-
-  // .labtests-item__info
-
-  &__info {
-  }
-
-  // .labtests-item__title
-
-  &__title {
-    @apply text-lg font-medium max-lg:text-sm;
   }
 }
 </style>

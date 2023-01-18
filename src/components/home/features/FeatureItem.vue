@@ -9,7 +9,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import HeraCaption from "@/components/UI/Caption.vue";
 import HeraParagraph from "@/components/UI/Paragraph.vue";

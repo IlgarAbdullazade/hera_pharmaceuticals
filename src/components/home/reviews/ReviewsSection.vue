@@ -1,5 +1,5 @@
 <template>
-  <section class="page__reviews reviews">
+  <section class="reviews">
     <div class="reviews__container">
       <div class="reviews__wrapper">
         <div class="reviews__content">

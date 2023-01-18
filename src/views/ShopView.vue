@@ -13,7 +13,6 @@
 
 <script>
 import HeraCategory from "@/components/common/Category.vue";
-
 export default {
   name: "ShopView",
   components: {
