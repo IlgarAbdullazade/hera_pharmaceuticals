@@ -1,1 +1,0 @@
-import{_ as t,o as a,c as o,r as s,a as n,t as c}from"./index-56e83697.js";const r={name:"HeraCaption"},_={class:"caption"};function p(e,d,i,l,u,f){return a(),o("h3",_,[s(e.$slots,"default",{},()=>[n(c(e.text),1)],!0)])}const $=t(r,[["render",p],["__scopeId","data-v-86adb21c"]]);export{$ as H};
