@@ -22,8 +22,8 @@
             </li>
             <li class="footer-nav__item">
               <router-link
-                :to="{ name: 'products' }"
-                exact-active-class="active"
+                :to="{ name: 'shop' }"
+                active-class="active"
                 class="footer-nav__link"
                 >Shop</router-link
               >
@@ -31,7 +31,7 @@
             <li class="footer-nav__item">
               <router-link
                 :to="{ name: 'aboutUs' }"
-                exact-active-class="active"
+                active-class="active"
                 class="footer-nav__link"
                 >About us</router-link
               >
@@ -39,7 +39,7 @@
             <li class="footer-nav__item">
               <router-link
                 :to="{ name: 'labTests' }"
-                exact-active-class="active"
+                active-class="active"
                 class="footer-nav__link"
                 >Labtests</router-link
               >
@@ -47,7 +47,7 @@
             <li class="footer-nav__item">
               <router-link
                 :to="{ name: 'contactUs' }"
-                exact-active-class="active"
+                active-class="active"
                 class="footer-nav__link"
                 >Contact us</router-link
               >
@@ -55,7 +55,7 @@
             <li class="footer-nav__item">
               <router-link
                 :to="{ name: 'faq' }"
-                exact-active-class="active"
+                active-class="active"
                 class="footer-nav__link"
                 >FAQ</router-link
               >
@@ -94,7 +94,6 @@
 
 <script>
 import { Icon } from "@iconify/vue";
-
 import HeraLogo from "@/components/common/Logo.vue";
 
 export default {

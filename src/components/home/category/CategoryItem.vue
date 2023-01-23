@@ -1,29 +1,28 @@
 <template>
-  <router-link :to="link" class="category-item">
+  <router-link
+    :to="{ name: 'products', params: { category: category.slug } }"
+    class="category-item"
+  >
     <div class="category-item__wrapper">
       <div class="category-item__image category-item-ibg-cover">
-        <slot name="image">{{ image }}</slot>
+        <img :src="category.image" :alt="category.name" />
       </div>
-      <hera-caption class="category-item__title">{{ title }}</hera-caption>
+      <hera-caption class="category-item__title">{{
+        category.name
+      }}</hera-caption>
     </div>
   </router-link>
 </template>
-
 <script>
 import HeraCaption from "@/components/UI/Caption.vue";
-
 export default {
   name: "HeraCategoryItem",
   components: {
     HeraCaption,
   },
   props: {
-    link: {
+    category: {
       type: Object,
-      required: true,
-    },
-    title: {
-      type: String,
       required: true,
     },
   },

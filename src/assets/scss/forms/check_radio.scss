@@ -14,5 +14,8 @@
 
   &__input {
     @apply mr-2;
+    &.error {
+      @apply ring-1 ring-textDanger;
+    }
   }
 }

@@ -7,47 +7,15 @@
             Our
             <strong class="text-primary"> products</strong></hera-heading
           >
-          <div class="category__grid">
+          <div class="category__grid" v-if="categories.length">
             <hera-category-item
+              v-for="category in categories"
+              :category="category"
+              :key="category.id"
               class="category__item"
-              title="Injectables"
-              :link="{ name: 'home' }"
-            >
-              <template v-slot:image>
-                <img src="@/assets/img/mock/trenbolone.png" alt="Injectables" />
-              </template>
-            </hera-category-item>
-
-            <hera-category-item
-              class="category__item"
-              title="Orals"
-              :link="{ name: 'home' }"
-            >
-              <template v-slot:image>
-                <img src="@/assets/img/mock/trenbolone.png" alt="Orals" />
-              </template>
-            </hera-category-item>
-
-            <hera-category-item
-              class="category__item"
-              title="HGH"
-              :link="{ name: 'home' }"
-            >
-              <template v-slot:image>
-                <img src="@/assets/img/mock/trenbolone.png" alt="HGH" />
-              </template>
-            </hera-category-item>
-
-            <hera-category-item
-              class="category__item"
-              title="Pharmagrade"
-              :link="{ name: 'home' }"
-            >
-              <template v-slot:image>
-                <img src="@/assets/img/mock/trenbolone.png" alt="Pharmagrade" />
-              </template>
-            </hera-category-item>
+            />
           </div>
+          <div v-else>Empty</div>
         </div>
       </div>
     </div>
@@ -55,6 +23,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import HeraHeading from "@/components/UI/Heading.vue";
 import HeraCategoryItem from "@/components/home/category/CategoryItem.vue";
 
@@ -63,6 +32,11 @@ export default {
   components: {
     HeraHeading,
     HeraCategoryItem,
+  },
+  computed: {
+    ...mapGetters({
+      categories: "categories/categories",
+    }),
   },
 };
 </script>

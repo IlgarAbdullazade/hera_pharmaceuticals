@@ -25,6 +25,7 @@
           <hera-button
             class="about__button _outline"
             :isLink="true"
+            :link="{ name: 'aboutUs' }"
             text="LEARN MORE"
           />
         </div>

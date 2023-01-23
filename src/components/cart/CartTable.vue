@@ -1,100 +1,58 @@
 <template>
   <div class="cart-table">
     <div class="cart-table__wrapper">
-      <div class="cart-table__header">
-        <div class="cart-table__row">
-          <div class="cart-table__cell cart-table__cell--product">Product</div>
-          <div class="cart-table__cell cart-table__cell--price">Price</div>
-          <div class="cart-table__cell cart-table__cell--quantity">
-            Quantity
+      <div class="cart-table__body" v-if="cartItems.length">
+        <div class="cart-table__header">
+          <div class="cart-table__row">
+            <div class="cart-table__cell cart-table__cell--product">
+              Product
+            </div>
+            <div class="cart-table__cell cart-table__cell--price">Price</div>
+            <div class="cart-table__cell cart-table__cell--quantity">
+              Quantity
+            </div>
+            <div class="cart-table__cell cart-table__cell--subtotal">
+              Subtotal
+            </div>
+            <div class="cart-table__cell cart-table__cell--remove"></div>
           </div>
-          <div class="cart-table__cell cart-table__cell--subtotal">
-            Subtotal
-          </div>
-          <div class="cart-table__cell cart-table__cell--remove"></div>
         </div>
+        <ul class="cart-table__items">
+          <hera-cart-item
+            v-for="product in cartItems"
+            :key="product.id"
+            :product="product"
+          />
+        </ul>
       </div>
-      <div class="cart-table__body">
-        <div class="cart-table__row cart-table__item">
-          <div class="cart-table__cell cart-table__cell--product text-xs">
-            NOVO NORDISK NORDITROPIN SIMPLEXX 5MG (15IU) - SOMATROPINE - 191
-            AMINO ACID
-          </div>
-          <div
-            data-cell="Price"
-            class="cart-table__cell cart-table__cell--price text-xl text-primary"
-          >
-            $50
-          </div>
-          <div
-            data-cell="Quantity"
-            class="cart-table__cell cart-table__cell--quantity"
-          >
-            <hera-quantity-box />
-          </div>
-          <div
-            data-cell="Subtotal"
-            class="cart-table__cell cart-table__cell--subtotal text-xl text-primary"
-          >
-            $150
-          </div>
-          <div class="cart-table__cell cart-table__cell--remove">
-            <button class="cart-table__remove-button">
-              <Icon icon="mdi:trash" />
-            </button>
-          </div>
-        </div>
-        <div class="cart-table__row cart-table__item">
-          <div
-            data-cell="Product"
-            class="cart-table__cell cart-table__cell--product text-xs"
-          >
-            NOVO NORDISK NORDITROPIN SIMPLEXX 5MG (15IU) - SOMATROPINE - 191
-            AMINO ACID
-          </div>
-          <div
-            data-cell="Price"
-            class="cart-table__cell cart-table__cell--price text-xl text-primary"
-          >
-            $50
-          </div>
-          <div
-            data-cell="Quantity"
-            class="cart-table__cell cart-table__cell--quantity"
-          >
-            <hera-quantity-box />
-          </div>
-          <div
-            data-cell="Subtotal"
-            class="cart-table__cell cart-table__cell--subtotal text-xl text-primary"
-          >
-            $150
-          </div>
-          <div class="cart-table__cell cart-table__cell--remove">
-            <button class="cart-table__remove-button">
-              <Icon icon="mdi:trash" />
-            </button>
-          </div>
-        </div>
+      <div v-if="!cartItems.length">
+        <h4 class="mt-3">
+          <strong>Your Cart is Empty</strong>
+        </h4>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { Icon } from "@iconify/vue";
-import HeraQuantityBox from "@/components/UI/QuantityBox.vue";
+import { mapGetters } from "vuex";
+import HeraCartItem from "@/components/cart/CartItem.vue";
 
 export default {
   name: "HeraCartTable",
   components: {
-    Icon,
-    HeraQuantityBox,
+    HeraCartItem,
+  },
+  computed: {
+    ...mapGetters({
+      cartItems: "cart/cartItems",
+      cartTotalAmount: "cart/cartTotalAmount",
+    }),
   },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .cart-table {
   // .cart-table__wrapper
 
@@ -124,7 +82,12 @@ export default {
   // .cart-table__body
 
   &__body {
-    @apply flex flex-col gap-1  max-lg:gap-9;
+  }
+
+  // .cart-table__items
+
+  &__items {
+    @apply flex flex-col gap-1 max-lg:gap-9;
   }
 
   // .cart-table__item

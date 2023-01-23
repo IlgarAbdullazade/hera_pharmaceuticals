@@ -22,7 +22,7 @@
       <Field v-slot="{ field }" name="message">
         <textarea
           v-bind="field"
-          class="contacts-form__input input"
+          class="contacts-form__textarea input"
           name="comment"
           rows="3"
           placeholder="Comment or Message"
@@ -91,6 +91,12 @@ export default {
   // .contacts-form__input
 
   &__input {
+  }
+
+  // .contacts-form__textarea
+
+  &__textarea {
+    @apply rounded-2xl;
   }
 
   // .contacts-form__button

@@ -2,7 +2,12 @@
   <div class="quantity-box">
     <div class="quantity-box__wrapper">
       <div class="quantity-box__action">
-        <button type="button" class="quantity-box__button" data-type="minus">
+        <button
+          type="button"
+          @click="decrementQuantity"
+          class="quantity-box__button"
+          data-type="minus"
+        >
           <Icon
             class="quantity-box__icon"
             icon="material-symbols:arrow-left-rounded"
@@ -12,11 +17,18 @@
       <input
         type="text"
         name="quantity"
-        value="1"
+        v-bind:value="quantity"
+        @input="updateQuantity($event.target.value)"
         class="input quantity-box__input"
+        readonly
       />
       <div class="quantity-box__action">
-        <button type="button" class="quantity-box__button" data-type="minus">
+        <button
+          type="button"
+          @click="incrementQuantity"
+          class="quantity-box__button"
+          data-type="plus"
+        >
           <Icon
             class="quantity-box__icon"
             icon="material-symbols:arrow-right-rounded"
@@ -34,6 +46,41 @@ export default {
   name: "HeraQuantityBox",
   components: {
     Icon,
+  },
+  props: {
+    qyt: {
+      type: Number,
+      default: 1,
+    },
+  },
+  data: () => {
+    return {
+      quantity: 1,
+    };
+  },
+  methods: {
+    incrementQuantity() {
+      this.quantity += 1;
+      this.$emit("update", this.quantity);
+    },
+    decrementQuantity() {
+      if (this.quantity > 1) {
+        this.quantity -= 1;
+        this.$emit("update", this.quantity);
+      }
+    },
+    updateQuantity() {
+      this.$emit("update", this.quantity);
+    },
+    onlyNumbers(e) {
+      let keyCode = e.keyCode;
+      if ((keyCode < 48 || keyCode > 57) && keyCode !== 8 && keyCode !== 9) {
+        e.preventDefault();
+      }
+    },
+  },
+  mounted() {
+    this.quantity = this.qyt;
   },
 };
 </script>

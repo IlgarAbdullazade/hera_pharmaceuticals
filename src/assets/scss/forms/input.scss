@@ -8,3 +8,7 @@
 textarea {
   @apply h-auto resize-none;
 }
+
+.error-message {
+  @apply mt-1 inline-block px-7 text-textDanger;
+}

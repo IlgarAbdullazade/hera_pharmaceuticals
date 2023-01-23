@@ -14,7 +14,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import HeraCartTable from "@/components/cart/CartTable.vue";
 import HeraCartCoupon from "@/components/cart/CartCoupon.vue";

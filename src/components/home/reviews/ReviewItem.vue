@@ -2,7 +2,7 @@
   <div class="review-item">
     <div class="review-item__wrapper">
       <div class="review-item__image review-item-ibg-cover">
-        <img src="@/assets/img/mock/omega.png" alt="Omega" />
+        <img :src="review.image" :alt="review.title" />
       </div>
       <hera-caption class="review-item__title">{{ review.title }}</hera-caption>
       <p class="review-item__text">

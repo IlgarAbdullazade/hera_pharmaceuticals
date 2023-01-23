@@ -1,7 +1,11 @@
 import { createRouter, createWebHistory } from "vue-router";
+import store from "../store";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
+  scrollBehavior() {
+    return { top: 0 };
+  },
   routes: [
     {
       path: "/",
@@ -11,15 +15,17 @@ const router = createRouter({
     {
       path: "/shop",
       name: "shop",
+      redirect: "/shop/all",
       component: () => import("../views/ShopView.vue"),
       children: [
         {
-          path: "",
+          path: ":category",
           name: "products",
+          props: (route) => ({ category: route.params.category || "all" }),
           component: () => import("../views/ProductsView.vue"),
         },
         {
-          path: ":id",
+          path: ":category/:id",
           name: "product",
           component: () => import("../views/ProductView.vue"),
         },
@@ -33,7 +39,15 @@ const router = createRouter({
     {
       path: "/labtests",
       name: "labTests",
-      component: () => import("../views/LabTestsView.vue"),
+      redirect: "/labtests/all",
+      children: [
+        {
+          path: ":category",
+          name: "labTestItems",
+          props: (route) => ({ category: route.params.category || "all" }),
+          component: () => import("../views/LabTestsView.vue"),
+        },
+      ],
     },
     {
       path: "/contact-us",
@@ -46,12 +60,45 @@ const router = createRouter({
       component: () => import("../views/FaqView.vue"),
     },
     {
-      path: "/profile",
-      name: "profile",
-      component: () => import("../views/ProfileView.vue"),
+      path: "/auth",
+      name: "auth",
+      redirect: "/auth/sing-in",
+      component: () => import("../views/AuthView.vue"),
+      beforeEnter: (to, from, next) => {
+        if (store.state.auth.isLoggedIn) {
+          next("/profile");
+        } else {
+          next();
+        }
+      },
       children: [
         {
-          path: "",
+          path: "sing-in",
+          name: "signIn",
+          component: () => import("../views/LoginView.vue"),
+        },
+        {
+          path: "sign-up",
+          name: "signUp",
+          component: () => import("../views/RegisterView.vue"),
+        },
+      ],
+    },
+    {
+      path: "/profile",
+      name: "profile",
+      redirect: "/profile/my-account",
+      component: () => import("../views/ProfileView.vue"),
+      beforeEnter: (to, from, next) => {
+        if (!store.state.auth.isLoggedIn) {
+          next("/auth/sing-in");
+        } else {
+          next();
+        }
+      },
+      children: [
+        {
+          path: "my-account",
           name: "myAccount",
           meta: { title: "My Account" },
           component: () => import("../views/MyAccountView.vue"),
@@ -96,6 +143,10 @@ const router = createRouter({
       path: "/payment",
       name: "payment",
       component: () => import("../views/PaymentView.vue"),
+    },
+    {
+      path: "/:catchAll(.*)",
+      component: () => import("../views/NotFoundView.vue"),
     },
   ],
 });

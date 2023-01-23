@@ -15,7 +15,7 @@
           <hera-button
             class="introduction__button primary"
             :isLink="true"
-            :link="{ name: 'products' }"
+            :link="{ name: 'shop' }"
             text="SHOP NOW"
           >
             <template v-slot:iconBefore>

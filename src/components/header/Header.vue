@@ -16,7 +16,7 @@
                 <span></span>
               </div>
             </button>
-            <button type="button" class="search-button">
+            <button type="button" class="search-button" @click="openModal">
               <Icon icon="material-symbols:search-rounded" />
             </button>
           </div>
@@ -37,8 +37,8 @@
                 </li>
                 <li class="menu__item">
                   <router-link
-                    :to="{ name: 'products' }"
-                    exact-active-class="active"
+                    :to="{ name: 'shop' }"
+                    active-class="active"
                     class="menu__link"
                     >Shop</router-link
                   >
@@ -46,7 +46,7 @@
                 <li class="menu__item">
                   <router-link
                     :to="{ name: 'aboutUs' }"
-                    exact-active-class="active"
+                    active-class="active"
                     class="menu__link"
                     >About us</router-link
                   >
@@ -54,7 +54,7 @@
                 <li class="menu__item">
                   <router-link
                     :to="{ name: 'labTests' }"
-                    exact-active-class="active"
+                    active-class="active"
                     class="menu__link"
                     >Labtests</router-link
                   >
@@ -62,7 +62,7 @@
                 <li class="menu__item">
                   <router-link
                     :to="{ name: 'contactUs' }"
-                    exact-active-class="active"
+                    active-class="active"
                     class="menu__link"
                     >Contact us</router-link
                   >
@@ -70,7 +70,7 @@
                 <li class="menu__item">
                   <router-link
                     :to="{ name: 'faq' }"
-                    exact-active-class="active"
+                    active-class="active"
                     class="menu__link"
                     >FAQ</router-link
                   >
@@ -81,55 +81,9 @@
               </button>
             </nav>
           </div>
-          <div v-if="!isTablet" class="header__search search">
-            <div class="search__wrapper">
-              <form class="search__form">
-                <div class="search__icon">
-                  <Icon icon="material-symbols:search-rounded" />
-                </div>
-                <input class="search__input" type="text" placeholder="Search" />
-                <button type="submit" class="search__button">
-                  <Icon icon="material-symbols:arrow-forward-ios-rounded" />
-                </button>
-              </form>
-            </div>
-          </div>
-          <div class="header__actions actions-header">
-            <router-link
-              :to="{ name: 'cart' }"
-              class="actions-header__item cart-header"
-            >
-              <div class="cart-header__icon">
-                <Icon icon="mdi:cart" />
-              </div>
-            </router-link>
-
-            <router-link
-              :to="{ name: 'myAccount' }"
-              class="actions-header__item user-header"
-            >
-              <div class="user-header__wrapper">
-                <div class="user-header__image">
-                  <Icon icon="mdi:account-circle" />
-                </div>
-                <div class="user-header__name">Clayton Santos</div>
-              </div>
-            </router-link>
-          </div>
+          <hera-search v-if="!isTablet" class="header__search" />
+          <hera-header-actions class="header__actions" />
         </div>
-        <!--<div v-if="isTablet" class="header__footer search">
-          <div class="search__wrapper">
-            <form class="search__form">
-              <div class="search__icon">
-                <Icon icon="material-symbols:search-rounded" />
-              </div>
-              <input class="search__input" type="text" placeholder="Search" />
-              <button type="submit" class="search__button">
-                <Icon icon="material-symbols:arrow-forward-ios-rounded" />
-              </button>
-            </form>
-          </div>
-        </div>-->
       </div>
     </div>
   </header>
@@ -139,12 +93,16 @@
 import { Icon } from "@iconify/vue";
 import { mapGetters } from "vuex";
 import HeraLogo from "@/components/common/Logo.vue";
+import HeraSearch from "@/components/common/Search.vue";
+import HeraHeaderActions from "@/components/header/HeaderActions.vue";
 
 export default {
   name: "HeraHeader",
   components: {
     Icon,
     HeraLogo,
+    HeraSearch,
+    HeraHeaderActions,
   },
   data() {
     return {
@@ -159,6 +117,19 @@ export default {
   methods: {
     toggleMenu() {
       this.menuIsOpen = !this.menuIsOpen;
+    },
+    openModal() {
+      this.$vfm.show({
+        component: "HeraCustomModal",
+        bind: {
+          name: "SearchModal",
+        },
+        slots: {
+          default: {
+            component: HeraSearch,
+          },
+        },
+      });
     },
   },
 };
@@ -207,7 +178,7 @@ export default {
   // .header__search
 
   &__search {
-    @apply mr-8 max-xl:mr-4;
+    @apply mr-6 max-w-[360px] max-xl:mr-2 max-xl:max-w-[260px] max-lg:max-w-none;
   }
 
   // .header__actions
@@ -244,13 +215,13 @@ export default {
   // .menu__item
 
   &__item {
-    @apply py-4 max-lg:w-full;
+    @apply max-lg:w-full;
   }
 
   // .menu__link
 
   &__link {
-    @apply inline-flex text-center font-secondary font-bold text-textHeader transition-colors hover:text-primary;
+    @apply inline-flex py-4 text-center font-secondary font-bold text-textHeader transition-colors hover:text-primary;
     &.active {
       @apply text-primary;
     }
@@ -260,72 +231,6 @@ export default {
 
   &__button {
     @apply hidden max-lg:absolute max-lg:right-4 max-lg:top-4 max-lg:block max-lg:text-3xl max-lg:text-textHeader;
-  }
-}
-.search {
-  @apply w-full max-w-[360px] max-xl:max-w-[260px] max-lg:max-w-none;
-
-  // .search__wrapper
-
-  &__wrapper {
-    @apply rounded-full bg-white;
-  }
-
-  // .search__form
-
-  &__form {
-    @apply relative flex items-center;
-  }
-
-  // .search__icon
-
-  &__icon {
-    @apply pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-xl text-[#ADB8CC];
-  }
-
-  // .search__input
-
-  &__input {
-    @apply w-full appearance-none border-none bg-transparent py-4 pl-12 pr-7 font-secondary text-xs font-bold transition-colors placeholder:text-[#ADB8CC] focus:text-primary focus:outline-none focus:ring-0;
-  }
-
-  // .search__button
-
-  &__button {
-    @apply flex items-center p-4 text-sm text-[#ADB8CC];
-  }
-}
-.actions-header {
-  @apply flex items-center space-x-5  max-lg:justify-end;
-  // .actions-header__item
-
-  &__item {
-  }
-}
-.cart-header {
-  // .cart-header__icon
-
-  &__icon {
-    @apply text-2xl text-primary;
-  }
-}
-.user-header {
-  // .user-header__wrapper
-
-  &__wrapper {
-    @apply flex items-center;
-  }
-
-  // .user-header__image
-
-  &__image {
-    @apply mr-3 text-3xl text-primary max-lg:mr-0;
-  }
-
-  // .user-header__name
-
-  &__name {
-    @apply font-secondary font-bold text-textHeader max-lg:hidden;
   }
 }
 .icon-menu {

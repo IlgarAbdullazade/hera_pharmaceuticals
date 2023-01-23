@@ -2,7 +2,7 @@
   <div class="page__labtests labtests">
     <div class="labtests__container">
       <div class="labtests__wrapper">
-        <hera-category class="labtests__category" />
+        <hera-category class="labtests__category" :isShop="false" />
         <hera-lab-test-list class="labtests__content" />
       </div>
     </div>

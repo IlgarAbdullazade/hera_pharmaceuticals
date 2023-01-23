@@ -5,6 +5,8 @@
     :class="[this.$route.name !== 'home' && ['pt-20', 'max-lg:pt-12']]"
   >
     <router-view />
+
+    <modals-container></modals-container>
   </main>
 
   <hera-footer />
@@ -12,6 +14,7 @@
 
 <script>
 import { mapActions } from "vuex";
+import { ModalsContainer } from "vue-final-modal";
 import HeraHeader from "@/components/header/Header.vue";
 import HeraFooter from "@/components/footer/Footer.vue";
 
@@ -20,6 +23,7 @@ export default {
   components: {
     HeraHeader,
     HeraFooter,
+    ModalsContainer,
   },
   methods: {
     ...mapActions({

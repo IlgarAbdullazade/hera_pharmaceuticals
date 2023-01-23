@@ -4,15 +4,14 @@
       <swiper
         :modules="modules"
         :breakpoints="breakpoints"
-        :auto-height="true"
         :pagination="{ el: '.swiper-pagination', clickable: true }"
         :navigation="{
           nextEl: '.swiper-button-next',
           prevEl: '.swiper-button-prev',
         }"
       >
-        <swiper-slide v-for="slide in slides" :key="slide.id">
-          <hera-review-item :review="slide" />
+        <swiper-slide v-for="review in reviews" :key="review.id">
+          <hera-review-item :review="review" />
         </swiper-slide>
       </swiper>
       <div class="swiper-button-next" slot="button-next"></div>
@@ -22,8 +21,8 @@
     <div class="swiper-pagination"></div>
   </div>
 </template>
-
 <script>
+import { mapGetters } from "vuex";
 import { Navigation, Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import HeraReviewItem from "@/components/home/reviews/ReviewItem.vue";
@@ -35,41 +34,10 @@ export default {
     SwiperSlide,
     HeraReviewItem,
   },
-  data() {
-    return {
-      slides: [
-        {
-          id: 1,
-          title: "Link Naymon",
-          description:
-            "Everything suits me, I buy goods on this site not for the first time, the delivery pleases me!",
-        },
-        {
-          id: 2,
-          title: "Link Naymon2",
-          description:
-            "Everything suits me, I buy goods on this site not for the first time, the delivery pleases me!",
-        },
-        {
-          id: 3,
-          title: "Link Naymon3",
-          description:
-            "Everything suits me, I buy goods on this site not for the first time, the delivery pleases me!",
-        },
-        {
-          id: 4,
-          title: "Link Naymon4",
-          description:
-            "Everything suits me, I buy goods on this site not for the first time, the delivery pleases me!",
-        },
-        {
-          id: 5,
-          title: "Link Naymon5",
-          description:
-            "Everything suits me, I buy goods on this site not for the first time, the delivery pleases me!",
-        },
-      ],
-    };
+  computed: {
+    ...mapGetters({
+      reviews: "reviews/reviews",
+    }),
   },
   setup() {
     return {

@@ -1,17 +1,19 @@
 <template>
   <div class="cart-footer">
     <div class="cart-footer__wrapper">
-      <div class="cart-footer__row">
+      <div class="cart-footer__row" v-if="cartItems.length">
         <span class="cart-footer__caption">Subtotal:</span>
-        <span class="cart-footer__price">$300</span>
+        <span class="cart-footer__price">${{ cartTotalAmount }}</span>
       </div>
-      <div class="cart-footer__row">
+      <div class="cart-footer__row" v-if="cartItems.length">
         <span class="cart-footer__caption">Shipping:</span>
-        <span class="cart-footer__price">$80</span>
+        <span class="cart-footer__price">${{ shippingPrice }}</span>
       </div>
       <div class="cart-footer__row">
         <span class="cart-footer__caption">Total:</span>
-        <span class="cart-footer__price">$380</span>
+        <span class="cart-footer__price"
+          >${{ cartTotalAmount + (cartItems.length ? shippingPrice : 0) }}</span
+        >
       </div>
       <hera-button
         :isLink="true"
@@ -24,12 +26,24 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import HeraButton from "@/components/UI/Button.vue";
 
 export default {
   name: "HeraCartFooter",
   components: {
     HeraButton,
+  },
+  data: () => {
+    return {
+      shippingPrice: 80,
+    };
+  },
+  computed: {
+    ...mapGetters({
+      cartItems: "cart/cartItems",
+      cartTotalAmount: "cart/cartTotalAmount",
+    }),
   },
 };
 </script>

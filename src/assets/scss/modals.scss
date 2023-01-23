@@ -1,0 +1,22 @@
+.modal {
+  @apply backdrop-blur-md;
+  // .modal__container
+
+  &__container {
+    @apply max-w-none p-0;
+  }
+  // .modal__content
+
+  &__content {
+    @apply container;
+  }
+  // .modal__close
+
+  &__close {
+    @apply ml-auto -mr-3 flex p-3 text-3xl text-white;
+  }
+}
+
+.full-height .modal__content {
+  @apply h-full;
+}

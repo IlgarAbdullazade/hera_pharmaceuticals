@@ -3,13 +3,27 @@
     <div class="category__wrapper">
       <div class="category__tabs category-tabs">
         <h3 class="category__caption">Category</h3>
-        <router-link :to="{}" class="category-tabs__item active">
-          Injectables
+        <router-link
+          :to="{
+            name: isShop ? 'products' : 'labTestItems',
+            params: { category: 'all' },
+          }"
+          class="category-tabs__item"
+          :class="{ active: categorySlug === 'all' }"
+        >
+          All
         </router-link>
-        <router-link :to="{}" class="category-tabs__item"> Orals </router-link>
-        <router-link :to="{}" class="category-tabs__item"> HGH </router-link>
-        <router-link :to="{}" class="category-tabs__item">
-          Pharmagrade
+        <router-link
+          :to="{
+            name: isShop ? 'products' : 'labTestItems',
+            params: { category: category.slug },
+          }"
+          class="category-tabs__item"
+          :class="{ active: categorySlug === category.slug }"
+          v-for="category in categories"
+          :key="category.id"
+        >
+          {{ category.name }}
         </router-link>
       </div>
     </div>
@@ -17,8 +31,24 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   name: "HeraCategory",
+  props: {
+    isShop: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  computed: {
+    ...mapGetters({
+      categories: "categories/categories",
+    }),
+    categorySlug() {
+      return this.$route.params.category;
+    },
+  },
 };
 </script>
 

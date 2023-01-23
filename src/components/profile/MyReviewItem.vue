@@ -3,32 +3,54 @@
     <div class="my-review-item__wrapper">
       <div class="my-review-item__content">
         <div class="my-review-item__image my-review-item-ibg-cover">
-          <img src="@/assets/img/mock/omega.png" alt="Omega" />
+          <img :src="review.image" :alt="review.title" />
         </div>
         <div class="my-review-item__info">
-          <h4 class="my-review-item__title">Clayton Santos</h4>
+          <h4 class="my-review-item__title">{{ review.title }}</h4>
           <p class="my-review-item__text">
-            I ordered test cyp. No pip at all. One of the best UGLS i have ever
-            tried. Looking to order my next cycle there. Probably gonna grab
-            deca and primo. GTG
+            {{ review.description }}
           </p>
         </div>
       </div>
-      <button class="my-review-item__button">
+      <button @click="openModal" class="my-review-item__button">
         <Icon icon="material-symbols:edit" />
         <span>Edit review</span>
       </button>
     </div>
   </div>
 </template>
-
 <script>
 import { Icon } from "@iconify/vue";
+import HeraMyReviewForm from "@/components/profile/MyReviewForm.vue";
 
 export default {
   name: "HeraMyReviewItem",
   components: {
     Icon,
+  },
+  props: {
+    review: {
+      type: Object,
+      required: true,
+    },
+  },
+  methods: {
+    openModal() {
+      this.$vfm.show({
+        component: "HeraCustomModal",
+        bind: {
+          name: "ReviewForm",
+        },
+        slots: {
+          default: {
+            component: HeraMyReviewForm,
+            bind: {
+              review: this.review,
+            },
+          },
+        },
+      });
+    },
   },
 };
 </script>
@@ -44,7 +66,7 @@ export default {
   // .my-review-item__content
 
   &__content {
-    @apply flex items-center gap-4;
+    @apply flex w-full items-center gap-4;
   }
 
   // .my-review-item__image

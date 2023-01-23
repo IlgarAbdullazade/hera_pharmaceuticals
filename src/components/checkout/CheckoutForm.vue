@@ -114,36 +114,17 @@
       <div class="checkout-content__col">
         <h3 class="checkout-content__title">Your order</h3>
         <div class="checkout-content__list checkout-list">
-          <div class="checkout-list__item checkout-product">
+          <div
+            class="checkout-list__item checkout-product"
+            v-for="product in cartItems"
+            :key="product.id"
+          >
             <div class="checkout-product__wrapper">
               <div class="checkout-product__name">
-                NOVO NORDISK NORDITROPIN SIMPLEXX 5MG (15IU) - SOMATROPINE - 191
-                AMINO ACID
+                {{ product.name }}
               </div>
               <div data-name="Subtotal" class="checkout-product__subtotal">
-                $150
-              </div>
-            </div>
-          </div>
-          <div class="checkout-list__item checkout-product">
-            <div class="checkout-product__wrapper">
-              <div class="checkout-product__name">
-                NOVO NORDISK NORDITROPIN SIMPLEXX 5MG (15IU) - SOMATROPINE - 191
-                AMINO ACID
-              </div>
-              <div data-name="Subtotal" class="checkout-product__subtotal">
-                $150
-              </div>
-            </div>
-          </div>
-          <div class="checkout-list__item checkout-product">
-            <div class="checkout-product__wrapper">
-              <div class="checkout-product__name">
-                NOVO NORDISK NORDITROPIN SIMPLEXX 5MG (15IU) - SOMATROPINE - 191
-                AMINO ACID
-              </div>
-              <div data-name="Subtotal" class="checkout-product__subtotal">
-                $150
+                $ {{ product.price * product.quantity }}
               </div>
             </div>
           </div>
@@ -252,6 +233,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import { Form, Field, ErrorMessage } from "vee-validate";
 import HeraButton from "@/components/UI/Button.vue";
 
@@ -262,6 +244,11 @@ export default {
     Field,
     ErrorMessage,
     HeraButton,
+  },
+  computed: {
+    ...mapGetters({
+      cartItems: "cart/cartItems",
+    }),
   },
 };
 </script>

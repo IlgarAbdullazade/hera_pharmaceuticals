@@ -1,16 +1,17 @@
 <template>
   <router-link v-if="isLink" class="button" :to="link" :target="target">
     <slot name="iconBefore"></slot>
-    <slot>{{ text }}</slot>
+    {{ text }}
+    <slot name="content"></slot>
     <slot name="iconAfter"></slot>
   </router-link>
-  <button v-else class="button" @click="emitClick" :type="type">
+  <button v-else class="button" :type="type">
     <slot name="iconBefore"></slot>
-    <slot>{{ text }}</slot>
+    {{ text }}
+    <slot name="content"></slot>
     <slot name="iconAfter"></slot>
   </button>
 </template>
-
 <script>
 export default {
   name: "HeraButton",
@@ -34,11 +35,6 @@ export default {
     target: {
       type: String,
       default: "_self",
-    },
-  },
-  methods: {
-    emitClick() {
-      this.$emit("click");
     },
   },
 };

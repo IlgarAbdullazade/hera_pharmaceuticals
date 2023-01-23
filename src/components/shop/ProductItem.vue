@@ -2,28 +2,49 @@
   <div class="product-item">
     <div class="product-item__wrapper">
       <router-link
-        :to="{ name: 'product', params: { id: 'id' } }"
+        :to="{
+          name: 'product',
+          params: { category: product.category.slug, id: product.id },
+        }"
         class="product-item__link"
       >
         <div class="product-item__image product-item-ibg-cover">
-          <img src="@/assets/img/mock/omega.png" alt="Omega" />
+          <img :src="product.image" :alt="product.name" />
         </div>
       </router-link>
       <div class="product-item__info product-item-info">
         <router-link
-          :to="{ name: 'product', params: { id: 'id' } }"
+          :to="{
+            name: 'product',
+            params: { category: product.category.slug, id: product.id },
+          }"
           class="product-item-info__link"
         >
           <h3 class="product-item-info__name line-clamp-2">
-            Testosterone Propionate 200 mg/ml
+            {{ product.name }}
           </h3>
         </router-link>
-        <div class="product-item-info__numbers">
-          <h5 class="product-item-info__price">$50</h5>
-          <hera-quantity-box class="product-item-info__quantity" />
+        <div class="product-item-info__numbers" v-if="quantity">
+          <h5 class="product-item-info__price">${{ product.price }}</h5>
+          <hera-quantity-box
+            class="product-item-info__quantity"
+            :qyt="quantity"
+            @update="updateQuantity"
+          />
         </div>
       </div>
-      <hera-button class="product-item__button _outline" text="Add to cart">
+      <hera-button
+        @click="this.isProductInCart(this.product.id) ? null : addToCart()"
+        :isLink="!!this.isProductInCart(this.product.id)"
+        :link="{ name: 'cart' }"
+        :class="[
+          'product-item__button',
+          this.isProductInCart(this.product.id) ? `primary` : '_outline',
+        ]"
+        :text="
+          this.isProductInCart(this.product.id) ? `In the cart` : `Add to cart`
+        "
+      >
         <template v-slot:iconAfter>
           <Icon class="ml-1 text-base" icon="mdi:cart" />
         </template>
@@ -33,6 +54,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import { Icon } from "@iconify/vue";
 import HeraButton from "@/components/UI/Button.vue";
 import HeraQuantityBox from "@/components/UI/QuantityBox.vue";
@@ -43,6 +65,36 @@ export default {
     Icon,
     HeraButton,
     HeraQuantityBox,
+  },
+  props: {
+    product: {
+      type: Object,
+      required: true,
+    },
+  },
+  data: () => {
+    return {
+      quantity: null,
+    };
+  },
+  computed: {
+    ...mapGetters({
+      isProductInCart: "cart/isProductInCart",
+    }),
+  },
+  methods: {
+    addToCart() {
+      this.product.quantity = this.quantity;
+      this.$store.dispatch("cart/addToCart", this.product);
+    },
+    updateQuantity(quantity) {
+      this.quantity = quantity;
+      if (this.isProductInCart(this.product.id)) this.addToCart();
+    },
+  },
+  mounted() {
+    const item = this.isProductInCart(this.product.id);
+    this.quantity = item ? item.quantity : 1;
   },
 };
 </script>
