@@ -126,7 +126,7 @@ export default {
 
 <style lang="scss" scoped>
 .review-modal {
-  @apply mt-40;
+  @apply mt-40 max-lg:mt-28;
   // .review-modal__wrapper
 
   &__wrapper {

@@ -132,6 +132,13 @@ export default {
       });
     },
   },
+  watch: {
+    $route() {
+      if (this.menuIsOpen) {
+        this.menuIsOpen = false;
+      }
+    },
+  },
 };
 </script>
 
