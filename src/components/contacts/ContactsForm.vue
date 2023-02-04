@@ -1,5 +1,10 @@
 <template>
-  <Form class="contacts-form">
+  <Form
+    @submit="onSubmitForm"
+    :validation-schema="validationSchema"
+    class="contacts-form"
+    ref="contactsForm"
+  >
     <div class="contacts-form__group contacts-form__group--name">
       <Field
         type="text"
@@ -23,13 +28,13 @@
         <textarea
           v-bind="field"
           class="contacts-form__textarea input"
-          name="comment"
+          name="message"
           rows="3"
           placeholder="Comment or Message"
         ></textarea>
       </Field>
 
-      <ErrorMessage name="comment" class="error-message" />
+      <ErrorMessage name="message" class="error-message" />
     </div>
     <hera-button
       class="contacts-form__button primary"
@@ -44,6 +49,7 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex";
 import { Form, Field, ErrorMessage } from "vee-validate";
 import { Icon } from "@iconify/vue";
 import HeraButton from "@/components/UI/Button.vue";
@@ -56,6 +62,29 @@ export default {
     ErrorMessage,
     Icon,
     HeraButton,
+  },
+  data() {
+    return {
+      validationSchema: {
+        name: "required",
+        email: "required|email",
+        message: "required",
+      },
+    };
+  },
+  computed: {
+    ...mapState({
+      isLoading: (state) => state.contacts.isLoading,
+      error: (state) => state.contacts.error,
+    }),
+  },
+  methods: {
+    ...mapActions({
+      getInTouch: "contacts/getInTouch",
+    }),
+    onSubmitForm(params) {
+      this.getInTouch(params).then(() => this.$refs.contactsForm.resetForm());
+    },
   },
 };
 </script>

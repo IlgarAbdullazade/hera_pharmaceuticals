@@ -1,13 +1,25 @@
 <template>
   <div class="account-tile">
     <div class="account-tile__name">{{ name }}:</div>
-    <div class="account-tile__value">{{ value }}</div>
+    <hera-shimmer
+      v-if="isLoading"
+      class="w-full"
+      :classes="['h-5', 'w-1/2', 'ml-auto']"
+    />
+    <div v-else class="account-tile__value">
+      {{ value }}
+    </div>
   </div>
 </template>
 
 <script>
+import HeraShimmer from "@/components/common/Shimmer.vue";
+
 export default {
   name: "HeraAccountTile",
+  components: {
+    HeraShimmer,
+  },
   props: {
     name: {
       type: String,
@@ -16,6 +28,10 @@ export default {
     value: {
       type: String,
       required: true,
+    },
+    isLoading: {
+      type: Boolean,
+      _default: false,
     },
   },
 };
@@ -27,6 +43,7 @@ export default {
   // .account-tile__name
 
   &__name {
+    @apply whitespace-nowrap;
   }
 
   // .account-tile__value

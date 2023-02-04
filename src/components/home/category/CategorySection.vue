@@ -7,15 +7,34 @@
             Our
             <strong class="text-primary"> products</strong></hera-heading
           >
-          <div class="category__grid" v-if="categories.length">
-            <hera-category-item
-              v-for="category in categories"
-              :category="category"
-              :key="category.id"
-              class="category__item"
-            />
+          <hera-error-block v-if="error" />
+          <div class="category__grid" v-if="isLoading">
+            <div v-for="index in 4" :key="index">
+              <hera-shimmer
+                :classes="[
+                  'w-full',
+                  'h-full',
+                  'aspect-square',
+                  'rounded-[30px]',
+                  'mb-5',
+                ]"
+              />
+              <hera-shimmer :classes="['mx-auto', 'w-40', 'h-7']" />
+            </div>
           </div>
-          <div v-else>Empty</div>
+          <template v-if="categories">
+            <div class="category__grid" v-if="categories.length">
+              <hera-category-item
+                v-for="category in categories"
+                :category="category"
+                :key="category.slug"
+                class="category__item"
+              />
+            </div>
+            <div v-else>
+              <hera-empty-block text="categories" />
+            </div>
+          </template>
         </div>
       </div>
     </div>
@@ -23,20 +42,38 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapState, mapGetters, mapActions } from "vuex";
 import HeraHeading from "@/components/UI/Heading.vue";
 import HeraCategoryItem from "@/components/home/category/CategoryItem.vue";
+import HeraEmptyBlock from "@/components/common/EmptyBlock.vue";
+import HeraErrorBlock from "@/components/common/ErrorBlock.vue";
+import HeraShimmer from "@/components/common/Shimmer.vue";
 
 export default {
   name: "HeraCategorySection",
   components: {
     HeraHeading,
     HeraCategoryItem,
+    HeraEmptyBlock,
+    HeraErrorBlock,
+    HeraShimmer,
   },
   computed: {
+    ...mapState({
+      isLoading: (state) => state.categories.isLoading,
+      error: (state) => state.categories.error,
+    }),
     ...mapGetters({
       categories: "categories/categories",
     }),
+  },
+  methods: {
+    ...mapActions({
+      getCategories: "categories/getCategories",
+    }),
+  },
+  mounted() {
+    this.getCategories();
   },
 };
 </script>

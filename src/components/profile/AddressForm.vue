@@ -1,36 +1,31 @@
 <template>
-  <Form class="address-form">
+  <Form
+    v-if="userAddress"
+    @submit="onSubmitForm"
+    :validation-schema="validationSchema"
+    class="address-form"
+  >
     <div class="address-form__row">
       <div class="address-form__caption">Your name*</div>
       <div class="address-form__group">
         <Field
           type="text"
-          name="firstName"
+          :value="userAddress?.first_name"
+          name="first_name"
           class="address-form__input input"
           placeholder="First Name"
         />
-        <ErrorMessage name="firstName" class="error-message" />
+        <ErrorMessage name="first_name" class="error-message" />
       </div>
       <div class="address-form__group">
         <Field
           type="text"
-          name="lastName"
+          :value="userAddress?.last_name"
+          name="last_name"
           class="address-form__input input"
           placeholder="Last Name"
         />
-        <ErrorMessage name="lastName" class="error-message" />
-      </div>
-    </div>
-    <div class="address-form__row">
-      <div class="address-form__caption">Country*</div>
-      <div class="address-form__group">
-        <Field
-          type="text"
-          name="country"
-          class="address-form__input input"
-          placeholder="Select country"
-        />
-        <ErrorMessage name="country" class="error-message" />
+        <ErrorMessage name="last_name" class="error-message" />
       </div>
     </div>
     <div class="address-form__row">
@@ -39,6 +34,7 @@
         <Field
           type="text"
           name="state"
+          :value="userAddress?.state"
           class="address-form__input input"
           placeholder="State/Province"
         />
@@ -46,13 +42,14 @@
       </div>
     </div>
     <div class="address-form__row">
-      <div class="address-form__caption">City*</div>
+      <div class="address-form__caption">Town/City*</div>
       <div class="address-form__group">
         <Field
           type="text"
           name="city"
+          :value="userAddress?.city"
           class="address-form__input input"
-          placeholder="City"
+          placeholder="Town/City"
         />
         <ErrorMessage name="city" class="error-message" />
       </div>
@@ -63,6 +60,7 @@
         <Field
           type="text"
           name="address"
+          :value="userAddress?.address"
           class="address-form__input input"
           placeholder="Address"
         />
@@ -74,37 +72,40 @@
       <div class="address-form__group">
         <Field
           type="text"
-          name="zip"
+          name="zip_code"
+          :value="userAddress?.zip_code"
           class="address-form__input input"
           placeholder="Zip/Post code"
         />
-        <ErrorMessage name="zip" class="error-message" />
+        <ErrorMessage name="zip_code" class="error-message" />
       </div>
     </div>
     <div class="address-form__row">
-      <div class="address-form__caption">Telephone*</div>
+      <div class="address-form__caption">Phone Number*</div>
       <div class="address-form__group">
         <Field
           type="text"
-          name="telephone"
+          :value="userAddress?.phone_number"
+          v-mask="`+1 (###) ###-##-##`"
+          name="phone_number"
           class="address-form__input input"
-          placeholder="Telephone"
+          placeholder="Phone Number"
         />
-        <ErrorMessage name="telephone" class="error-message" />
+        <ErrorMessage name="phone_number" class="error-message" />
       </div>
     </div>
     <div class="address-form__row">
       <div class="address-form__caption"></div>
       <hera-button
         class="address-form__button primary"
-        :type="'submit'"
+        type="submit"
         text="Save Address"
       />
     </div>
   </Form>
 </template>
-
 <script>
+import { mapState, mapActions, mapGetters } from "vuex";
 import { Form, Field, ErrorMessage } from "vee-validate";
 import HeraButton from "@/components/UI/Button.vue";
 
@@ -115,6 +116,40 @@ export default {
     Field,
     ErrorMessage,
     HeraButton,
+  },
+  data() {
+    return {
+      validationSchema: {
+        first_name: "required",
+        last_name: "required",
+        address: "required",
+        city: "required",
+        state: "required",
+        zip_code: "required",
+        phone_number: "required",
+      },
+    };
+  },
+  computed: {
+    ...mapState({
+      isLoading: (state) => state.auth.isLoading,
+      error: (state) => state.auth.error,
+    }),
+    ...mapGetters({
+      userAddress: "auth/userAddress",
+    }),
+  },
+  methods: {
+    ...mapActions({
+      changeAddress: "auth/changeAddress",
+      getAddress: "auth/getAddress",
+    }),
+    onSubmitForm(params) {
+      this.changeAddress(params);
+    },
+  },
+  mounted() {
+    this.getAddress();
   },
 };
 </script>

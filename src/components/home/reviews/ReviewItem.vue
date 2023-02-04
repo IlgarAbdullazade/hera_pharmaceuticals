@@ -6,7 +6,7 @@
       </div>
       <hera-caption class="review-item__title">{{ review.title }}</hera-caption>
       <p class="review-item__text">
-        {{ review.description }}
+        {{ review.text }}
       </p>
     </div>
   </div>
@@ -16,7 +16,7 @@
 import HeraCaption from "@/components/UI/Caption.vue";
 
 export default {
-  name: "HerareviewItem",
+  name: "HeraReviewItem",
   components: {
     HeraCaption,
   },

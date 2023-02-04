@@ -1,26 +1,35 @@
 <template>
   <div class="cart-coupon">
-    <Form class="cart-coupon__form">
+    <Form
+      @submit="onSubmitForm"
+      :validation-schema="validationSchema"
+      class="cart-coupon__form"
+      ref="couponForm"
+    >
       <div class="cart-coupon__group">
         <Field
+          :disabled="isLoading"
           type="text"
-          name="code"
+          name="promo_code"
           class="cart-coupon__input input"
           placeholder="Coupon code"
         />
-        <ErrorMessage name="code" class="error-message" />
       </div>
       <hera-button
+        :disabled="isLoading"
         class="cart-coupon__button primary"
-        :type="'submit'"
+        type="submit"
         text="Activate"
       />
     </Form>
+    <div v-if="cartPromo" class="cart-coupon__info">
+      Promo code "{{ cartPromo.promo_text }}" has applied
+    </div>
   </div>
 </template>
-
 <script>
-import { Form, Field, ErrorMessage } from "vee-validate";
+import { mapState, mapActions, mapGetters } from "vuex";
+import { Form, Field } from "vee-validate";
 import HeraButton from "@/components/UI/Button.vue";
 
 export default {
@@ -28,8 +37,32 @@ export default {
   components: {
     Form,
     Field,
-    ErrorMessage,
     HeraButton,
+  },
+  data() {
+    return {
+      validationSchema: {
+        promo_code: "required",
+      },
+    };
+  },
+  computed: {
+    ...mapState({
+      isLoading: (state) => state.cart.isLoading,
+    }),
+    ...mapGetters({
+      cartPromo: "cart/cartPromo",
+    }),
+  },
+  methods: {
+    ...mapActions({
+      acceptPromoCode: "cart/acceptPromoCode",
+    }),
+    onSubmitForm(values) {
+      this.acceptPromoCode(values).then(() => {
+        this.$refs.couponForm.resetForm();
+      });
+    },
   },
 };
 </script>
@@ -58,6 +91,12 @@ export default {
 
   &__button {
     @apply w-full;
+  }
+
+  // .cart-coupon__info
+
+  &__info {
+    @apply mt-2 max-w-md px-7 text-green-500 max-lg:max-w-none;
   }
 }
 </style>

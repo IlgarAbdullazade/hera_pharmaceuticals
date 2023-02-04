@@ -6,11 +6,11 @@
         type="button"
         class="labtest-item__image labtest-item-ibg-cover"
       >
-        <img :src="product.image" :alt="product.title" />
+        <img :src="baseURL + product.image" :alt="product.title" />
       </button>
       <div class="labtest-item__info">
         <h3 class="labtest-item__title">
-          {{ product.name }}
+          {{ product.title }}
         </h3>
       </div>
     </div>
@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 import HeraReportsModal from "@/components/common/ReportsModal.vue";
 
 export default {
@@ -31,22 +32,32 @@ export default {
       required: true,
     },
   },
+  data: () => {
+    return {
+      baseURL: import.meta.env.VITE_APP_BASEURL,
+    };
+  },
   methods: {
+    ...mapActions({
+      getLabtest: "labtests/getLabtest",
+    }),
     openModal() {
-      this.$vfm.show({
-        component: "HeraCustomModal",
-        bind: {
-          name: "ReportsModal",
-          class: "full-height",
-        },
-        slots: {
-          default: {
-            component: HeraReportsModal,
-            bind: {
-              reports: this.product.reports,
+      this.getLabtest(this.product.slug).then((res) => {
+        this.$vfm.show({
+          component: "HeraCustomModal",
+          bind: {
+            name: "ReportsModal",
+            class: "full-height",
+          },
+          slots: {
+            default: {
+              component: HeraReportsModal,
+              bind: {
+                reports: res.data,
+              },
             },
           },
-        },
+        });
       });
     },
   },

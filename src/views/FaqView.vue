@@ -2,101 +2,76 @@
   <div class="page__faq faq">
     <div class="faq__container">
       <div class="faq__wrapper">
-        <div class="faq__item faq-item">
-          <div class="faq-item__wrapper">
-            <h4 class="faq-item__title">Privacy Policy</h4>
-            <p class="faq-item__text">
-              We use anonymous offshore hosting outside of US government
-              jurisdiction. Customer data is compartmentalized and never shared
-              with outside sources. By deleting your account we automatically
-              delete all of your data.
-            </p>
-          </div>
+        <div class="faq__empty" v-if="error">
+          <hera-error-block />
         </div>
-        <div class="faq__item faq-item">
-          <div class="faq-item__wrapper">
-            <h4 class="faq-item__title">Terms & Conditions</h4>
-            <p class="faq-item__text">
-              By using our site you confirm that you are older than 21 and you
-              agree to responsibly use these products at your own discretion.
-            </p>
+        <template v-if="isLoading">
+          <div class="faq__item faq-item" v-for="index in 10" :key="index">
+            <div class="faq-item__wrapper">
+              <h4 class="faq-item__title">
+                <hera-shimmer :classes="['h-5', 'w-1/4', 'mb-4']" />
+              </h4>
+              <p class="faq-item__text">
+                <hera-shimmer :classes="['h-5', 'w-full', 'mb-2']" />
+                <hera-shimmer :classes="['h-5', 'w-full', 'mb-2']" />
+                <hera-shimmer :classes="['h-5', 'w-1/2', 'mb-2']" />
+              </p>
+            </div>
           </div>
-        </div>
-        <div class="faq__item faq-item">
-          <div class="faq-item__wrapper">
-            <h4 class="faq-item__title">Minimum order</h4>
-            <p class="faq-item__text">We currently have no minimum order</p>
-          </div>
-        </div>
-        <div class="faq__item faq-item">
-          <div class="faq-item__wrapper">
-            <h4 class="faq-item__title">Shipping</h4>
-            <div class="faq-item__content">
-              <div class="faq-item__point">Flat fee $15 USPS</div>
-              <div class="faq-item__point">
-                Free shipping on orders above $300
+        </template>
+        <template v-if="faqList">
+          <template v-if="faqList.length">
+            <div
+              class="faq__item faq-item"
+              v-for="(faq, index) in faqList"
+              :key="index"
+            >
+              <div class="faq-item__wrapper">
+                <h4 class="faq-item__title">{{ faq.title }}</h4>
+                <p class="faq-item__text">
+                  {{ faq.description }}
+                </p>
               </div>
             </div>
+          </template>
+          <div class="faq__empty" v-else>
+            <hera-empty-block text="FAQs" />
           </div>
-        </div>
-        <div class="faq__item faq-item">
-          <div class="faq-item__wrapper">
-            <h4 class="faq-item__title">Payment</h4>
-            <p class="faq-item__text">
-              <a
-                href="https://www.youtube.com/watch?v=wXvFkiXxxTM"
-                target="_blank"
-                class="text-primary"
-                >https://www.youtube.com/watch?v=wXvFkiXxxTM
-              </a>
-              Watch this tutorial to learn how to pay with bitcoin.
-            </p>
-          </div>
-        </div>
-        <div class="faq__item faq-item">
-          <div class="faq-item__wrapper">
-            <h4 class="faq-item__title">Which oils do you use</h4>
-            <p class="faq-item__text">We use MCTAMK oils</p>
-          </div>
-        </div>
-        <div class="faq__item faq-item">
-          <div class="faq-item__wrapper">
-            <h4 class="faq-item__title">How do you make your orals</h4>
-            <p class="faq-item__text">
-              We just say mashallah and press that shit
-            </p>
-          </div>
-        </div>
-        <div class="faq__item faq-item">
-          <div class="faq-item__wrapper">
-            <h4 class="faq-item__title">ETA & tracking code</h4>
-            <p class="faq-item__text">
-              Estimated T/A time is 7-10 days from receiving payment. We do not
-              provide tracking codes.
-            </p>
-          </div>
-        </div>
-        <div class="faq__item faq-item">
-          <div class="faq-item__wrapper">
-            <h4 class="faq-item__title">Shipping</h4>
-            <div class="faq-item__content">
-              <p class="faq-item__text">Only contact us with our official</p>
-              <router-link :to="{}" class="faq-item__point"
-                >e-mail info@hera</router-link
-              >
-              <router-link :to="{}" class="faq-item__point">
-                tg @herapharmaceuticals
-              </router-link>
-            </div>
-          </div>
-        </div>
+        </template>
       </div>
     </div>
   </div>
 </template>
 <script>
+import { mapState, mapActions, mapGetters } from "vuex";
+import HeraShimmer from "@/components/common/Shimmer.vue";
+import HeraEmptyBlock from "@/components/common/EmptyBlock.vue";
+import HeraErrorBlock from "@/components/common/ErrorBlock.vue";
+
 export default {
   name: "FaqView",
+  components: {
+    HeraShimmer,
+    HeraEmptyBlock,
+    HeraErrorBlock,
+  },
+  computed: {
+    ...mapState({
+      isLoading: (state) => state.faq.isLoading,
+      error: (state) => state.faq.error,
+    }),
+    ...mapGetters({
+      faqList: "faq/faqList",
+    }),
+  },
+  methods: {
+    ...mapActions({
+      getFaqList: "faq/getFaqList",
+    }),
+  },
+  mounted() {
+    this.getFaqList();
+  },
 };
 </script>
 
@@ -116,6 +91,12 @@ export default {
   // .faq__item
 
   &__item {
+  }
+
+  // .faq__emtpy
+
+  &__empty {
+    @apply py-20;
   }
 }
 .faq-item {

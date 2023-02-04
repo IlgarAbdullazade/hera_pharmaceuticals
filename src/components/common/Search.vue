@@ -1,26 +1,62 @@
 <template>
   <div class="search">
     <div class="search__wrapper">
-      <form class="search__form">
+      <Form
+        @submit="onSubmitForm"
+        :validation-schema="validationSchema"
+        class="search__form"
+        ref="searchForm"
+      >
         <div class="search__icon">
           <Icon icon="material-symbols:search-rounded" />
         </div>
-        <input class="search__input" type="text" placeholder="Search" />
+        <Field
+          name="query"
+          class="search__input"
+          type="text"
+          placeholder="Search"
+        />
         <button type="submit" class="search__button">
           <Icon icon="material-symbols:arrow-forward-ios-rounded" />
         </button>
-      </form>
+      </Form>
     </div>
   </div>
 </template>
 
 <script>
+import { mapActions } from "vuex";
 import { Icon } from "@iconify/vue";
+import { Form, Field, ErrorMessage } from "vee-validate";
 
 export default {
   name: "HeraSearch",
   components: {
     Icon,
+    Form,
+    Field,
+    ErrorMessage,
+  },
+  data() {
+    return {
+      validationSchema: {
+        query: "required",
+      },
+    };
+  },
+  methods: {
+    ...mapActions({
+      searchProduct: "shop/products/searchProduct",
+    }),
+    onSubmitForm(values) {
+      this.searchProduct(values).then(() => {
+        this.$router.push({
+          name: "products",
+          query: { search: values.query },
+        });
+      });
+      this.$refs.searchForm.resetForm();
+    },
   },
 };
 </script>
@@ -32,7 +68,7 @@ export default {
   // .search__wrapper
 
   &__wrapper {
-    @apply rounded-full bg-white;
+    @apply overflow-hidden rounded-full bg-white;
   }
 
   // .search__form

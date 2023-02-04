@@ -19,14 +19,17 @@ export default {
 
 <style lang="scss" scoped>
 .history {
+  @apply h-full;
   // .history__wrapper
 
   &__wrapper {
+    @apply h-full;
   }
 
   // .history__table
 
   &__table {
+    @apply h-full;
   }
 }
 </style>

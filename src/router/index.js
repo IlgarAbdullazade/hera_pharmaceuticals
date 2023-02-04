@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import store from "../store";
+import { getItem } from "@/helpers/persistanceStorage";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,17 +15,16 @@ const router = createRouter({
     {
       path: "/shop",
       name: "shop",
-      redirect: "/shop/all",
+      redirect: "/shop",
       component: () => import("../views/ShopView.vue"),
       children: [
         {
-          path: ":category",
+          path: "",
           name: "products",
-          props: (route) => ({ category: route.params.category || "all" }),
           component: () => import("../views/ProductsView.vue"),
         },
         {
-          path: ":category/:id",
+          path: ":id",
           name: "product",
           component: () => import("../views/ProductView.vue"),
         },
@@ -39,15 +38,7 @@ const router = createRouter({
     {
       path: "/labtests",
       name: "labTests",
-      redirect: "/labtests/all",
-      children: [
-        {
-          path: ":category",
-          name: "labTestItems",
-          props: (route) => ({ category: route.params.category || "all" }),
-          component: () => import("../views/LabTestsView.vue"),
-        },
-      ],
+      component: () => import("../views/LabTestsView.vue"),
     },
     {
       path: "/contact-us",
@@ -65,7 +56,7 @@ const router = createRouter({
       redirect: "/auth/sing-in",
       component: () => import("../views/AuthView.vue"),
       beforeEnter: (to, from, next) => {
-        if (store.state.auth.isLoggedIn) {
+        if (getItem("accessToken")) {
           next("/profile");
         } else {
           next();
@@ -90,7 +81,7 @@ const router = createRouter({
       redirect: "/profile/my-account",
       component: () => import("../views/ProfileView.vue"),
       beforeEnter: (to, from, next) => {
-        if (!store.state.auth.isLoggedIn) {
+        if (!getItem("accessToken")) {
           next("/auth/sing-in");
         } else {
           next();
@@ -143,6 +134,18 @@ const router = createRouter({
       path: "/payment",
       name: "payment",
       component: () => import("../views/PaymentView.vue"),
+    },
+    {
+      path: "/terms-and-conditions",
+      name: "terms",
+      meta: { slug: "terms-and-conditions" },
+      component: () => import("../views/TermsView.vue"),
+    },
+    {
+      path: "/privacy-policy",
+      meta: { slug: "privacy-policy" },
+      name: "policy",
+      component: () => import("../views/TermsView.vue"),
     },
     {
       path: "/:catchAll(.*)",

@@ -2,14 +2,17 @@
   <div class="report-modal">
     <div
       class="report-modal__item"
-      v-for="(image, index) in reports"
+      v-for="(item, index) in reports"
       :key="index"
     >
-      <img class="report-modal__image" :src="image" :alt="image" />
+      <img
+        class="report-modal__image"
+        :src="baseURL + item.image"
+        :alt="item.image"
+      />
     </div>
   </div>
 </template>
-
 <script>
 export default {
   name: "HeraReportModal",
@@ -18,6 +21,11 @@ export default {
       type: Array,
       required: true,
     },
+  },
+  data: () => {
+    return {
+      baseURL: import.meta.env.VITE_APP_BASEURL,
+    };
   },
 };
 </script>

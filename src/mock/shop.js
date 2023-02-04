@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker";
 
+//const products = [];
 const products = [
   {
     id: "eddeea09-2e13-4c32-a129-53265e87b84c",
@@ -426,7 +427,7 @@ const categories = [
   },
 ];
 
-//for (let i = 0; i < 20; i++) {
+//for (let i = 0; i < 200; i++) {
 //  products.push({
 //    id: faker.datatype.uuid(),
 //    name: faker.commerce.productName(),

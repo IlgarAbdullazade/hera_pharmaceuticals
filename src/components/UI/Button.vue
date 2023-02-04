@@ -42,7 +42,7 @@ export default {
 
 <style lang="scss" scoped>
 .button {
-  @apply inline-flex h-12 items-center justify-center rounded-full border border-solid p-3 font-medium transition-colors;
+  @apply inline-flex h-12 items-center justify-center rounded-full border border-solid p-3 font-medium transition-colors disabled:pointer-events-none disabled:opacity-75;
   &.primary {
     @apply border-primary bg-primary text-white hover:bg-blue-700;
   }

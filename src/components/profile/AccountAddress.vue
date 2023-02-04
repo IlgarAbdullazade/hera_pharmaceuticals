@@ -6,45 +6,73 @@
         <hera-account-tile
           class="account-address__tile"
           name="First name"
-          value="No"
+          :value="userAddress?.first_name ?? `No`"
+          :isLoading="isLoading"
         />
         <hera-account-tile
           class="account-address__tile"
           name="Last name"
-          value="No"
+          :value="userAddress?.last_name ?? `No`"
+          :isLoading="isLoading"
         />
         <hera-account-tile
           class="account-address__tile"
           name="Address"
-          value="No"
+          :value="userAddress?.address ?? `No`"
+          :isLoading="isLoading"
         />
         <hera-account-tile
           class="account-address__tile"
           name="City"
-          value="No"
+          :value="userAddress?.city ?? `No`"
+          :isLoading="isLoading"
         />
         <hera-account-tile
           class="account-address__tile"
           name="State/Province"
-          value="No"
+          :value="userAddress?.state ?? `No`"
+          :isLoading="isLoading"
         />
         <hera-account-tile
           class="account-address__tile"
           name="Zip/Post code"
-          value="No"
+          :value="userAddress?.zip_code ?? `No`"
+          :isLoading="isLoading"
+        />
+        <hera-account-tile
+          class="account-address__tile"
+          name="Telephone"
+          :value="userAddress?.phone_number ?? `No`"
+          :isLoading="isLoading"
         />
       </div>
     </div>
   </div>
 </template>
-
 <script>
+import { mapActions, mapGetters, mapState } from "vuex";
 import HeraAccountTile from "@/components/profile/AccountTile.vue";
 
 export default {
   name: "HeraAccountAddress",
   components: {
     HeraAccountTile,
+  },
+  computed: {
+    ...mapState({
+      isLoading: (state) => state.auth.isLoading,
+    }),
+    ...mapGetters({
+      userAddress: "auth/userAddress",
+    }),
+  },
+  methods: {
+    ...mapActions({
+      getAddress: "auth/getAddress",
+    }),
+  },
+  mounted() {
+    this.getAddress();
   },
 };
 </script>

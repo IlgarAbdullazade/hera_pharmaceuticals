@@ -5,9 +5,12 @@
         <div class="cart__content cart-content">
           <div class="cart-content__body">
             <h3 class="cart-content__title">Cart</h3>
-            <hera-cart-table class="cart-content__table" />
-            <hera-cart-coupon class="cart-content__coupon" />
-            <hera-cart-footer class="cart-content__footer" />
+            <template v-if="cartItems.length">
+              <hera-cart-table class="cart-content__table" />
+              <hera-cart-coupon class="cart-content__coupon" />
+              <hera-cart-footer class="cart-content__footer" />
+            </template>
+            <hera-cart-empty v-else class="cart-content__empty" />
           </div>
         </div>
       </div>
@@ -15,9 +18,11 @@
   </div>
 </template>
 <script>
+import { mapGetters } from "vuex";
 import HeraCartTable from "@/components/cart/CartTable.vue";
 import HeraCartCoupon from "@/components/cart/CartCoupon.vue";
 import HeraCartFooter from "@/components/cart/CartFooter.vue";
+import HeraCartEmpty from "@/components/cart/CartEmpty.vue";
 
 export default {
   name: "CartView",
@@ -25,6 +30,12 @@ export default {
     HeraCartTable,
     HeraCartCoupon,
     HeraCartFooter,
+    HeraCartEmpty,
+  },
+  computed: {
+    ...mapGetters({
+      cartItems: "cart/cartItems",
+    }),
   },
 };
 </script>
@@ -75,6 +86,12 @@ export default {
   // .cart-content__footer
 
   &__footer {
+  }
+
+  // .cart-content__empty
+
+  &__empty {
+    @apply pt-10;
   }
 }
 </style>

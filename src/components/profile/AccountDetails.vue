@@ -3,16 +3,16 @@
     <div class="account-details__wrapper">
       <div class="account-details__info">
         <div class="account-details__caption">Personal details</div>
-        <div class="account-details__column">
+        <div class="account-details__column" v-if="currentUser">
           <hera-account-tile
             class="account-details__tile"
             name="Name"
-            value="PavlovichDesign"
+            :value="currentUser.name"
           />
           <hera-account-tile
             class="account-details__tile"
             name="Email"
-            value="Dpavloviche@gmail.com"
+            :value="currentUser.email"
           />
         </div>
       </div>
@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import HeraAccountTile from "@/components/profile/AccountTile.vue";
 import HeraButton from "@/components/UI/Button.vue";
 
@@ -42,14 +42,22 @@ export default {
     HeraAccountTile,
     HeraButton,
   },
+  computed: {
+    ...mapGetters({
+      currentUser: "auth/currentUser",
+    }),
+  },
   methods: {
     ...mapActions({
       logout: "auth/logout",
+      clearCart: "cart/clearCart",
     }),
     onLogout() {
-      this.logout().then(() => {
-        this.$router.push({ name: "home" });
-      });
+      this.$router.push({ name: "home" }).then(() =>
+        this.logout().then(() => {
+          this.clearCart();
+        })
+      );
     },
   },
 };

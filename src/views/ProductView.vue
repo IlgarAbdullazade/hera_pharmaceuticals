@@ -1,38 +1,45 @@
 <template>
-  <div class="product-view">
+  <div v-if="product" class="product-view">
     <div class="product-view__wrapper">
       <div class="product-view__header">
         <div class="product-view__card product-card">
           <div class="product-card__wrapper">
             <div class="product-card__image product-card-ibg-cover">
-              <img :src="product.image" :alt="product.name" />
+              <img :src="baseURL + product.image" :alt="product.title" />
             </div>
             <div class="product-card__info">
               <h3 class="product-card__name">
-                {{ product.name }}
+                {{ product.title }}
               </h3>
-              <div class="product-card__numbers">
+              <div class="product-card__numbers" v-if="quantity">
                 <h5 class="product-card__price">${{ product.price }}</h5>
                 <hera-quantity-box
                   class="product-card__quantity"
                   :qyt="quantity"
+                  :maxValue="product.in_stock"
                   @update="updateQuantity"
                 />
               </div>
               <hera-button
                 @click="
-                  this.isProductInCart(this.product.id) ? null : addToCart()
+                  isLoggedIn
+                    ? this.isProductInCart(this.product.slug)
+                      ? null
+                      : addToCart()
+                    : null
                 "
-                :isLink="!!this.isProductInCart(this.product.id)"
-                :link="{ name: 'cart' }"
+                :isLink="
+                  !!this.isProductInCart(this.product.slug) || !isLoggedIn
+                "
+                :link="{ name: isLoggedIn ? 'cart' : 'signIn' }"
                 :class="[
                   'product-card__button',
-                  this.isProductInCart(this.product.id)
+                  this.isProductInCart(this.product.slug)
                     ? `primary`
                     : '_outline',
                 ]"
                 :text="
-                  this.isProductInCart(this.product.id)
+                  this.isProductInCart(this.product.slug)
                     ? `In the cart`
                     : `Add to cart`
                 "
@@ -46,7 +53,7 @@
         </div>
         <hera-product-report
           class="product-view__report"
-          :reports="product.reports"
+          :reports="product.test_report"
         />
       </div>
       <div class="product-view__content product-content">
@@ -60,7 +67,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import { Icon } from "@iconify/vue";
 import HeraButton from "@/components/UI/Button.vue";
 import HeraQuantityBox from "@/components/UI/QuantityBox.vue";
@@ -78,33 +85,55 @@ export default {
   },
   data: () => {
     return {
+      baseURL: import.meta.env.VITE_APP_BASEURL,
       quantity: null,
     };
   },
   computed: {
     ...mapGetters({
-      getProductById: "products/getProductById",
+      isLoggedIn: "auth/isLoggedIn",
       isProductInCart: "cart/isProductInCart",
+      product: "shop/product/product",
     }),
-    product() {
-      const product = this.getProductById(this.$route.params.id);
-      this.quantity = product.quantity;
-      return product;
-    },
   },
   methods: {
+    ...mapActions({
+      getProduct: "shop/product/getProduct",
+      selectCategory: "categories/selectCategory",
+    }),
+    updateUserCart() {
+      this.$store.dispatch("cart/updateUserCart", {
+        product: this.product,
+        quantity: this.quantity,
+      });
+    },
     addToCart() {
-      this.product.quantity = this.quantity;
-      this.$store.dispatch("cart/addToCart", this.product);
+      this.$store.dispatch("cart/addToCart", {
+        product: this.product,
+        quantity: this.quantity,
+      });
+      this.updateUserCart();
     },
     updateQuantity(quantity) {
       this.quantity = quantity;
-      if (this.isProductInCart(this.product.id)) this.addToCart();
+      if (
+        this.product.in_stock >= this.quantity &&
+        this.isProductInCart(this.product.slug)
+      ) {
+        this.$store.dispatch("cart/updateCartQuantity", {
+          product: this.product,
+          quantity: this.quantity,
+        });
+        this.updateUserCart();
+      }
     },
   },
   mounted() {
-    const item = this.isProductInCart(this.product.id);
-    this.quantity = item ? item.quantity : 1;
+    this.getProduct(this.$route.params.id).then((res) => {
+      this.selectCategory(res.data.category.slug);
+      const item = this.isProductInCart(res.data.slug);
+      this.quantity = item ? item.quantity : 1;
+    });
   },
 };
 </script>

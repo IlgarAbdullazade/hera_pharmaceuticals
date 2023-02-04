@@ -5,25 +5,34 @@
         <h3 class="category__caption">Category</h3>
         <router-link
           :to="{
-            name: isShop ? 'products' : 'labTestItems',
-            params: { category: 'all' },
+            name: isShop ? 'products' : 'labTests',
           }"
           class="category-tabs__item"
-          :class="{ active: categorySlug === 'all' }"
+          @click="selectCategory('all')"
+          :class="{ active: selectedCategory === 'all' }"
         >
           All
         </router-link>
+
+        <template v-if="isLoading">
+          <hera-shimmer
+            v-for="index in 3"
+            :key="index"
+            :classes="['w-24', 'h-7', 'rounded-full']"
+          />
+        </template>
+
         <router-link
           :to="{
-            name: isShop ? 'products' : 'labTestItems',
-            params: { category: category.slug },
+            name: isShop ? 'products' : 'labTests',
+            query: { category: category.slug },
           }"
           class="category-tabs__item"
-          :class="{ active: categorySlug === category.slug }"
+          :class="{ active: selectedCategory === category.slug }"
           v-for="category in categories"
           :key="category.id"
         >
-          {{ category.name }}
+          {{ category.title }}
         </router-link>
       </div>
     </div>
@@ -31,10 +40,14 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapState, mapGetters, mapActions } from "vuex";
+import HeraShimmer from "@/components/common/Shimmer.vue";
 
 export default {
   name: "HeraCategory",
+  components: {
+    HeraShimmer,
+  },
   props: {
     isShop: {
       type: Boolean,
@@ -42,11 +55,31 @@ export default {
     },
   },
   computed: {
+    ...mapState({
+      isLoading: (state) => state.categories.isLoading,
+    }),
     ...mapGetters({
       categories: "categories/categories",
+      selectedCategory: "categories/selectedCategory",
     }),
     categorySlug() {
-      return this.$route.params.category;
+      return this.$route.query.category;
+    },
+  },
+  methods: {
+    ...mapActions({
+      getCategories: "categories/getCategories",
+      selectCategory: "categories/selectCategory",
+    }),
+  },
+  mounted() {
+    this.getCategories();
+  },
+  watch: {
+    categorySlug() {
+      if (this.$route.name === "products" || this.$route.name === "labTests") {
+        this.selectCategory(this.categorySlug ?? "all");
+      }
     },
   },
 };

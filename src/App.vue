@@ -1,5 +1,6 @@
 <template>
   <hera-header :class="{ _absolute: this.$route.name === 'home' }" />
+
   <main
     class="page"
     :class="[this.$route.name !== 'home' && ['pt-20', 'max-lg:pt-12']]"
@@ -15,6 +16,7 @@
 <script>
 import { mapActions } from "vuex";
 import { ModalsContainer } from "vue-final-modal";
+import { getItem } from "@/helpers/persistanceStorage";
 import HeraHeader from "@/components/header/Header.vue";
 import HeraFooter from "@/components/footer/Footer.vue";
 
@@ -28,15 +30,15 @@ export default {
   methods: {
     ...mapActions({
       onResize: "adaptive/onResize",
+      getUser: "auth/getUser",
+      getCart: "cart/getCart",
     }),
-    setTheme(theme) {
-      localStorage.setItem("user-theme", theme);
-      this.userTheme = theme;
-      document.documentElement.className = theme;
-    },
   },
   mounted() {
     this.onResize();
+    if (getItem("accessToken")) {
+      this.getUser().then(() => this.getCart());
+    }
   },
   created() {
     window.addEventListener("resize", this.onResize);

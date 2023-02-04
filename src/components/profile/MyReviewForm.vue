@@ -20,17 +20,17 @@
           <ErrorMessage name="name" class="error-message" />
         </div>
         <div class="review-modal-form__group">
-          <Field v-slot="{ field }" name="feedback">
+          <Field v-slot="{ field }" name="text">
             <textarea
               v-bind="field"
               class="review-modal-form__textarea input"
-              name="feedback"
+              name="text"
               rows="8"
               placeholder="Feedback"
             ></textarea>
           </Field>
 
-          <ErrorMessage name="feedback" class="error-message" />
+          <ErrorMessage name="text" class="error-message" />
         </div>
         <div class="review-modal-form__group">
           <hera-button
@@ -69,7 +69,7 @@
         </div>
         <hera-button
           class="review-modal-form__button primary"
-          :type="'submit'"
+          type="submit"
           text="Submit review"
         />
       </Form>
@@ -101,23 +101,31 @@ export default {
     return {
       validationSchema: {
         name: "required|min:3|max:50",
-        feedback: "required|min:8|max:1000",
+        text: "required|min:8|max:1000",
       },
       formValues: {
         name: this.review ? this.review.title : null,
-        feedback: this.review ? this.review.description : null,
+        text: this.review ? this.review.text : null,
         image: this.review ? this.review.image : null,
       },
+      selectedImage: null,
       selectedImageName: null,
     };
   },
   methods: {
     onSubmitReview(values) {
-      console.log(values);
+      const formData = new FormData();
+      formData.append("image", this.selectedImage);
+      console.log(formData);
     },
     onFileChange(e) {
       const file = e.target.files[0];
       this.selectedImageName = file.name;
+      const reader = new FileReader();
+      reader.readAsArrayBuffer(file);
+      reader.onload = () => {
+        this.selectedImage = new Uint8Array(reader.result);
+      };
       //this.url = URL.createObjectURL(file);
     },
   },
@@ -126,7 +134,7 @@ export default {
 
 <style lang="scss" scoped>
 .review-modal {
-  @apply mt-40 max-lg:mt-28;
+  @apply max-lg: mt-40 mt-28;
   // .review-modal__wrapper
 
   &__wrapper {
@@ -144,11 +152,12 @@ export default {
   &__form {
   }
 }
+
 .review-modal-form {
   // .review-modal-form__group
 
   &__group {
-    @apply mb-2.5 last:mb-0;
+    @apply last: mb-2.5 mb-0;
   }
 
   // .review-modal-form__input

@@ -9,12 +9,12 @@
       >
         <div class="login-form__group">
           <Field
-            type="text"
-            name="username"
+            type="email"
+            name="email"
             class="login-form__input input"
-            placeholder="Username or email"
+            placeholder="Email"
           />
-          <ErrorMessage name="username" class="error-message" />
+          <ErrorMessage name="email" class="error-message" />
         </div>
         <div class="login-form__group">
           <Field
@@ -25,17 +25,10 @@
           />
           <ErrorMessage name="password" class="error-message" />
         </div>
-        <div class="login-form__group">
-          <VueRecaptcha
-            :sitekey="siteKey"
-            :load-recaptcha-script="true"
-            @verify="handleSuccess"
-            @error="handleError"
-          />
-        </div>
         <hera-button
+          :disabled="isLoading"
           class="login-form__button primary"
-          :type="'submit'"
+          type="submit"
           text="Sign In"
         />
       </Form>
@@ -50,9 +43,8 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 import { Form, Field, ErrorMessage } from "vee-validate";
-import { VueRecaptcha } from "vue-recaptcha";
 import HeraButton from "@/components/UI/Button.vue";
 
 export default {
@@ -61,32 +53,33 @@ export default {
     Form,
     Field,
     ErrorMessage,
-    VueRecaptcha,
     HeraButton,
   },
   data() {
     return {
       validationSchema: {
-        username: "required|min:3|max:50",
+        email: "required|email",
         password: "required|min:8|max:128",
       },
       siteKey: "yourSiteAPIKey",
     };
   },
+  computed: {
+    ...mapState({
+      isLoading: (state) => state.auth.isLoading,
+      error: (state) => state.auth.error,
+    }),
+  },
   methods: {
     ...mapActions({
       login: "auth/login",
+      getCart: "cart/getCart",
     }),
-    onSubmitLogin(values) {
-      this.login(values).then(() => {
+    onSubmitLogin(credentials) {
+      this.login(credentials).then(() => {
+        this.getCart();
         this.$router.push({ name: "myAccount" });
       });
-    },
-    handleError() {
-      // Do some validation
-    },
-    handleSuccess() {
-      // Do some validation
     },
   },
 };

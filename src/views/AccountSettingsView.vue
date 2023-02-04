@@ -65,6 +65,15 @@ export default {
   &__group {
     @apply w-full;
   }
+  // .settings-form__group--code
+
+  &__group--code {
+    @apply flex rounded-full bg-bgPrimary;
+
+    button {
+      @apply my-2.5 w-28 flex-shrink-0 whitespace-nowrap border-l border-textSecondary py-1 pr-7 pl-5 text-xs text-primary disabled:text-textSecondary;
+    }
+  }
 
   // .settings-form__input
 

@@ -4,7 +4,7 @@ body {
 }
 
 body {
-  @apply min-w-[360px] bg-bgPrimary font-primary text-sm font-normal text-textPrimary antialiased;
+  @apply min-w-[360px] bg-bgPrimary font-primary text-sm font-normal text-textPrimary antialiased scrollbar scrollbar-thin scrollbar-thumb-primary;
 }
 
 [class*="-ibg"] {

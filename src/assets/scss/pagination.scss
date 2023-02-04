@@ -1,0 +1,15 @@
+.pagination-container {
+  @apply flex list-none justify-center gap-2.5;
+
+  .paginate-buttons {
+    @apply h-10 w-10 cursor-pointer rounded-full border border-primary bg-white text-primary transition-colors hover:bg-primary hover:text-white max-sm:h-6 max-sm:w-6;
+    &.back-button,
+    &.next-button {
+      @apply text-xl;
+    }
+  }
+
+  .active-page {
+    @apply bg-primary text-white;
+  }
+}

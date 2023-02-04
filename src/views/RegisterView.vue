@@ -10,11 +10,11 @@
         <div class="register-form__group">
           <Field
             type="text"
-            name="username"
+            name="name"
             class="register-form__input input"
-            placeholder="Username"
+            placeholder="Name"
           />
-          <ErrorMessage name="username" class="error-message" />
+          <ErrorMessage name="name" class="error-message" />
         </div>
         <div class="register-form__group">
           <Field
@@ -37,11 +37,11 @@
         <div class="register-form__group">
           <Field
             type="password"
-            name="confirmPassword"
+            name="confirm_password"
             class="register-form__input input"
             placeholder="Confirm password"
           />
-          <ErrorMessage name="confirmPassword" class="error-message" />
+          <ErrorMessage name="confirm_password" class="error-message" />
         </div>
         <div class="register-form__group">
           <div class="register-form__checkbox check-radio">
@@ -61,7 +61,7 @@
                   :value="true"
                 />
                 I accept the
-                <router-link :to="{}" class="text-primary">
+                <router-link :to="{ name: 'terms' }" class="text-primary">
                   terms and conditions</router-link
                 >
               </label>
@@ -69,8 +69,9 @@
           </div>
         </div>
         <hera-button
+          :disabled="isLoading"
           class="register-form__button primary"
-          :type="'submit'"
+          type="submit"
           text="Sign Up"
         />
       </Form>
@@ -88,9 +89,10 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 import { Form, Field, ErrorMessage } from "vee-validate";
 import HeraButton from "@/components/UI/Button.vue";
+import { useToast } from "vue-toastification";
 
 export default {
   name: "RegisterView",
@@ -103,10 +105,10 @@ export default {
   data() {
     return {
       validationSchema: {
-        username: "required|min:3|max:50",
+        name: "required|min:3|max:50",
         email: "required|max:254|email",
         password: "required|min:8|max:128",
-        confirmPassword: "required|confirmed:@password",
+        confirm_password: "required|confirmed:@password",
         terms: (value) => {
           if (value) {
             return true;
@@ -116,21 +118,20 @@ export default {
       },
     };
   },
+  computed: {
+    ...mapState({
+      isLoading: (state) => state.auth.isLoading,
+      error: (state) => state.auth.error,
+    }),
+  },
   methods: {
     ...mapActions({
       register: "auth/register",
     }),
-    onSubmitRegister(values) {
-      console.log(values);
-      this.register(values).then(() => {
+    onSubmitRegister(credentials) {
+      this.register(credentials).then(() => {
         this.$router.push({ name: "myAccount" });
       });
-    },
-    handleError() {
-      // Do some validation
-    },
-    handleSuccess() {
-      // Do some validation
     },
   },
 };

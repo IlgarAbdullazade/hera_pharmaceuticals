@@ -13,8 +13,8 @@
     </router-link>
 
     <router-link
-      :to="{ name: 'myAccount' }"
       v-if="isLoggedIn"
+      :to="{ name: 'myAccount' }"
       class="actions-header__item user-header"
     >
       <div class="user-header__wrapper">

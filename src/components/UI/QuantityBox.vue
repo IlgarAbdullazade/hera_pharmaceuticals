@@ -4,6 +4,7 @@
       <div class="quantity-box__action">
         <button
           type="button"
+          :disabled="quantity === 1"
           @click="decrementQuantity"
           class="quantity-box__button"
           data-type="minus"
@@ -25,6 +26,7 @@
       <div class="quantity-box__action">
         <button
           type="button"
+          :disabled="quantity === maxValue"
           @click="incrementQuantity"
           class="quantity-box__button"
           data-type="plus"
@@ -52,6 +54,10 @@ export default {
       type: Number,
       default: 1,
     },
+    maxValue: {
+      type: Number,
+      required: true,
+    },
   },
   data: () => {
     return {
@@ -60,8 +66,10 @@ export default {
   },
   methods: {
     incrementQuantity() {
-      this.quantity += 1;
-      this.$emit("update", this.quantity);
+      if (this.maxValue > this.quantity) {
+        this.quantity += 1;
+        this.$emit("update", this.quantity);
+      }
     },
     decrementQuantity() {
       if (this.quantity > 1) {
@@ -101,7 +109,7 @@ export default {
   // .quantity-box__button
 
   &__button {
-    @apply flex items-center justify-center text-xl text-[#808080] transition-transform hover:scale-125;
+    @apply flex items-center justify-center text-xl text-[#808080] transition-transform hover:scale-125 disabled:opacity-50;
   }
 
   // .quantity-box__icon

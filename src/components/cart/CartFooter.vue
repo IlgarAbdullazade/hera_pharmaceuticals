@@ -3,7 +3,14 @@
     <div class="cart-footer__wrapper">
       <div class="cart-footer__row" v-if="cartItems.length">
         <span class="cart-footer__caption">Subtotal:</span>
-        <span class="cart-footer__price">${{ cartTotalAmount }}</span>
+        <div class="flex gap-2">
+          <span class="cart-footer__price">${{ cartTotalAmount }}</span>
+          <span
+            v-if="cartPromo"
+            class="cart-footer__price !text-textSecondary line-through"
+            >${{ cartRealTotalAmount }}</span
+          >
+        </div>
       </div>
       <div class="cart-footer__row" v-if="cartItems.length">
         <span class="cart-footer__caption">Shipping:</span>
@@ -42,7 +49,9 @@ export default {
   computed: {
     ...mapGetters({
       cartItems: "cart/cartItems",
+      cartPromo: "cart/cartPromo",
       cartTotalAmount: "cart/cartTotalAmount",
+      cartRealTotalAmount: "cart/cartRealTotalAmount",
     }),
   },
 };

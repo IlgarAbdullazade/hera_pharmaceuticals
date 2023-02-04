@@ -10,7 +10,7 @@
           prevEl: '.swiper-button-prev',
         }"
       >
-        <swiper-slide v-for="review in reviews" :key="review.id">
+        <swiper-slide v-for="(review, index) in reviews" :key="index">
           <hera-review-item :review="review" />
         </swiper-slide>
       </swiper>

@@ -3,29 +3,35 @@
     <router-link
       :to="{
         name: 'product',
-        params: { category: product.category.slug, id: product.id },
+        params: {
+          id: item.product.slug,
+        },
       }"
       class="cart-table__cell cart-table__cell--product text-xs hover:text-primary"
     >
-      {{ product.name }}
+      {{ item.product.title }}
     </router-link>
     <div
       data-cell="Price"
       class="cart-table__cell cart-table__cell--price text-xl text-primary"
     >
-      ${{ product.price }}
+      ${{ item.product.price }}
     </div>
     <div
       data-cell="Quantity"
       class="cart-table__cell cart-table__cell--quantity"
     >
-      <hera-quantity-box :qyt="product.quantity" @update="updateQuantity" />
+      <hera-quantity-box
+        :qyt="item.quantity"
+        :maxValue="item.product.in_stock"
+        @update="updateQuantity"
+      />
     </div>
     <div
       data-cell="Subtotal"
       class="cart-table__cell cart-table__cell--subtotal text-xl text-primary"
     >
-      ${{ product.price * product.quantity }}
+      ${{ item.product.price * item.quantity }}
     </div>
     <div class="cart-table__cell cart-table__cell--remove">
       <button @click="removeCartItem()" class="cart-table__remove-button">
@@ -46,7 +52,7 @@ export default {
     HeraQuantityBox,
   },
   props: {
-    product: {
+    item: {
       type: Object,
       required: true,
     },
@@ -57,19 +63,29 @@ export default {
     };
   },
   methods: {
-    addToCart() {
-      this.$store.dispatch("cart/addToCart", this.product);
+    updateUserCart(qty) {
+      this.$store.dispatch("cart/updateUserCart", {
+        product: this.item.product,
+        quantity: qty,
+      });
     },
     updateQuantity(quantity) {
-      this.product.quantity = quantity;
-      this.addToCart();
+      this.quantity = quantity;
+      if (this.item.product.in_stock >= this.quantity) {
+        this.$store.dispatch("cart/updateCartQuantity", {
+          product: this.item.product,
+          quantity: this.quantity,
+        });
+        this.updateUserCart(quantity);
+      }
     },
     removeCartItem() {
-      this.$store.dispatch("cart/removeCartItem", this.product);
+      this.$store.dispatch("cart/removeCartItem", this.item.product);
+      this.updateUserCart(0);
     },
   },
   mounted() {
-    this.quantity = this.product.quantity;
+    this.quantity = this.item.quantity;
   },
 };
 </script>

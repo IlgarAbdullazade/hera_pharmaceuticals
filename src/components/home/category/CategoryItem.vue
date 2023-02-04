@@ -1,14 +1,14 @@
 <template>
   <router-link
-    :to="{ name: 'products', params: { category: category.slug } }"
+    :to="{ name: 'products', query: { category: category.slug } }"
     class="category-item"
   >
     <div class="category-item__wrapper">
       <div class="category-item__image category-item-ibg-cover">
-        <img :src="category.image" :alt="category.name" />
+        <img :src="baseURL + category.image" :alt="category.title" />
       </div>
       <hera-caption class="category-item__title">{{
-        category.name
+        category.title
       }}</hera-caption>
     </div>
   </router-link>
@@ -19,6 +19,11 @@ export default {
   name: "HeraCategoryItem",
   components: {
     HeraCaption,
+  },
+  data() {
+    return {
+      baseURL: import.meta.env.VITE_APP_BASEURL,
+    };
   },
   props: {
     category: {

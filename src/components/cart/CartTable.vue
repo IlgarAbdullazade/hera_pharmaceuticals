@@ -19,21 +19,15 @@
         </div>
         <ul class="cart-table__items">
           <hera-cart-item
-            v-for="product in cartItems"
-            :key="product.id"
-            :product="product"
+            v-for="item in cartItems"
+            :key="item.product.slug"
+            :item="item"
           />
         </ul>
-      </div>
-      <div v-if="!cartItems.length">
-        <h4 class="mt-3">
-          <strong>Your Cart is Empty</strong>
-        </h4>
       </div>
     </div>
   </div>
 </template>
-
 <script>
 import { mapGetters } from "vuex";
 import HeraCartItem from "@/components/cart/CartItem.vue";

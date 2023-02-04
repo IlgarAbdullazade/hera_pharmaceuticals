@@ -18,10 +18,12 @@ export default {
 
 <style lang="scss" scoped>
 .my-reviews {
+  @apply h-full;
+
   // .my-reviews__wrapper
 
   &__wrapper {
-    @apply flex flex-col gap-14 max-lg:rounded-2xl max-lg:p-0;
+    @apply flex h-full flex-col gap-14 max-lg:rounded-2xl max-lg:p-0;
   }
 
   // .my-reviews__form

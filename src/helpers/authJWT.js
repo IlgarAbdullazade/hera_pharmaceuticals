@@ -1,9 +1,7 @@
 export class AuthJWT {
-  constructor() {}
-
   static isTokenExpired(token, offsetSeconds) {
     // Return if there is no token
-    if (!token || token === '') {
+    if (!token || token === "") {
       return true;
     }
 
@@ -22,10 +20,10 @@ export class AuthJWT {
 
   static _b64decode(str) {
     const chars =
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
-    let output = '';
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+    let output = "";
 
-    str = String(str).replace(/=+$/, '');
+    str = String(str).replace(/=+$/, "");
 
     if (str.length % 4 === 1) {
       throw new Error(
@@ -61,28 +59,28 @@ export class AuthJWT {
       Array.prototype.map
         .call(
           this._b64decode(str),
-          (c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+          (c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2)
         )
-        .join('')
+        .join("")
     );
   }
 
   static _urlBase64Decode(str) {
-    let output = str.replace(/-/g, '+').replace(/_/g, '/');
+    let output = str.replace(/-/g, "+").replace(/_/g, "/");
     switch (output.length % 4) {
       case 0: {
         break;
       }
       case 2: {
-        output += '==';
+        output += "==";
         break;
       }
       case 3: {
-        output += '=';
+        output += "=";
         break;
       }
       default: {
-        throw Error('Illegal base64url string!');
+        throw Error("Illegal base64url string!");
       }
     }
     return this._b64DecodeUnicode(output);
@@ -95,7 +93,7 @@ export class AuthJWT {
     }
 
     // Split the token
-    const parts = token.split('.');
+    const parts = token.split(".");
 
     if (parts.length !== 3) {
       throw new Error(
@@ -107,7 +105,7 @@ export class AuthJWT {
     const decoded = this._urlBase64Decode(parts[1]);
 
     if (!decoded) {
-      throw new Error('Cannot decode the token.');
+      throw new Error("Cannot decode the token.");
     }
 
     return JSON.parse(decoded);
@@ -118,7 +116,7 @@ export class AuthJWT {
     const decodedToken = this._decodeToken(token);
 
     // Return if the decodedToken doesn't have an 'exp' field
-    if (!Object.prototype.hasOwnProperty.call(decodedToken, 'exp')) {
+    if (!Object.prototype.hasOwnProperty.call(decodedToken, "exp")) {
       return null;
     }
 

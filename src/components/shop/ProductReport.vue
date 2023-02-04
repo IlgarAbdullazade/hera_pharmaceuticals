@@ -1,18 +1,22 @@
 <template>
   <div class="product-report">
     <div class="product-report__wrapper">
-      <button
-        type="button"
-        @click="openModal"
-        class="product-report__image product-report-ibg-cover"
-      >
-        <Icon
-          class="product-report__icon"
-          icon="material-symbols:search-rounded"
-        />
-        <img :src="reports[0]" :alt="reports[0]" />
-      </button>
-      <span class="product-report__text">TEST REPORT</span>
+      <template v-if="reports.length">
+        <button
+          v-if="reports.length"
+          type="button"
+          @click="openModal"
+          class="product-report__image product-report-ibg-cover"
+        >
+          <Icon
+            class="product-report__icon"
+            icon="material-symbols:search-rounded"
+          />
+          <img :src="baseURL + reports[0].image" :alt="reports[0].image" />
+        </button>
+        <span class="product-report__text">TEST REPORT</span>
+      </template>
+      <span v-else>Not Test Reports found</span>
     </div>
   </div>
 </template>
@@ -31,6 +35,11 @@ export default {
       type: Array,
       required: true,
     },
+  },
+  data() {
+    return {
+      baseURL: import.meta.env.VITE_APP_BASEURL,
+    };
   },
   methods: {
     openModal() {

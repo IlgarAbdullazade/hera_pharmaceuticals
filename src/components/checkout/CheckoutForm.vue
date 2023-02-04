@@ -1,6 +1,10 @@
 <template>
-  <div class="checkout-content">
-    <Form class="checkout-content__body">
+  <div v-if="userAddress" class="checkout-content">
+    <Form
+      @submit="onSubmitForm"
+      :validation-schema="validationSchema"
+      class="checkout-content__body"
+    >
       <div class="checkout-content__col">
         <h3 class="checkout-content__title">Billing details</h3>
         <div class="checkout-content__form checkout-form">
@@ -8,71 +12,29 @@
             <div class="checkout-form__group">
               <Field
                 type="text"
-                name="name"
+                name="first_name"
+                :value="userAddress?.first_name"
                 class="checkout-form__input input"
                 placeholder="First name"
               />
-              <ErrorMessage name="name" class="error-message" />
+              <ErrorMessage name="first_name" class="error-message" />
             </div>
             <div class="checkout-form__group">
               <Field
                 type="text"
-                name="lastName"
+                name="last_name"
+                :value="userAddress?.last_name"
                 class="checkout-form__input input"
                 placeholder="Last name"
               />
-              <ErrorMessage name="lastName" class="error-message" />
+              <ErrorMessage name="last_name" class="error-message" />
             </div>
-          </div>
-          <div class="checkout-form__group">
-            <Field
-              type="text"
-              name="companyName"
-              class="checkout-form__input input"
-              placeholder="Company name (optional)"
-            />
-            <ErrorMessage name="companyName" class="error-message" />
-          </div>
-          <div class="checkout-form__group">
-            <Field
-              type="text"
-              name="country"
-              class="checkout-form__input input"
-              placeholder="Country/Region"
-            />
-            <ErrorMessage name="country" class="error-message" />
-          </div>
-          <div class="checkout-form__group">
-            <Field
-              type="text"
-              name="companyName"
-              class="checkout-form__input input"
-              placeholder="Company name (optional)"
-            />
-            <ErrorMessage name="companyName" class="error-message" />
-          </div>
-          <div class="checkout-form__group">
-            <Field
-              type="text"
-              name="address"
-              class="checkout-form__input input"
-              placeholder="Street address"
-            />
-            <ErrorMessage name="address" class="error-message" />
-          </div>
-          <div class="checkout-form__group">
-            <Field
-              type="text"
-              name="postCode"
-              class="checkout-form__input input"
-              placeholder="Postcode/ZIP"
-            />
-            <ErrorMessage name="postCode" class="error-message" />
           </div>
           <div class="checkout-form__group">
             <Field
               type="text"
               name="city"
+              :value="userAddress?.city"
               class="checkout-form__input input"
               placeholder="Town/City"
             />
@@ -81,18 +43,51 @@
           <div class="checkout-form__group">
             <Field
               type="text"
-              name="phone"
+              name="state"
+              :value="userAddress?.state"
               class="checkout-form__input input"
-              placeholder="Phone"
+              placeholder="State/Province"
             />
-            <ErrorMessage name="phone" class="error-message" />
+            <ErrorMessage name="state" class="error-message" />
+          </div>
+          <div class="checkout-form__group">
+            <Field
+              type="text"
+              name="address"
+              :value="userAddress?.address"
+              class="checkout-form__input input"
+              placeholder="Address"
+            />
+            <ErrorMessage name="address" class="error-message" />
+          </div>
+          <div class="checkout-form__group">
+            <Field
+              type="text"
+              name="zip_code"
+              :value="userAddress?.zip_code"
+              class="checkout-form__input input"
+              placeholder="Zip/Post code"
+            />
+            <ErrorMessage name="zip_code" class="error-message" />
+          </div>
+          <div class="checkout-form__group">
+            <Field
+              type="text"
+              name="phone_number"
+              :value="userAddress?.phone_number"
+              v-mask="`+1 (###) ###-##-##`"
+              class="checkout-form__input input"
+              placeholder="Phone Number"
+            />
+            <ErrorMessage name="phone_number" class="error-message" />
           </div>
           <div class="checkout-form__group">
             <Field
               type="email"
               name="email"
+              :value="currentUser.email"
               class="checkout-form__input input"
-              placeholder="Email addres"
+              placeholder="Email address"
             />
             <ErrorMessage name="email" class="error-message" />
           </div>
@@ -106,7 +101,6 @@
                 placeholder="Order notes (optional)"
               ></textarea>
             </Field>
-
             <ErrorMessage name="notes" class="error-message" />
           </div>
         </div>
@@ -116,15 +110,15 @@
         <div class="checkout-content__list checkout-list">
           <div
             class="checkout-list__item checkout-product"
-            v-for="product in cartItems"
-            :key="product.id"
+            v-for="item in cartItems"
+            :key="item.product.slug"
           >
             <div class="checkout-product__wrapper">
               <div class="checkout-product__name">
-                {{ product.name }}
+                {{ item.product.title }}
               </div>
               <div data-name="Subtotal" class="checkout-product__subtotal">
-                $ {{ product.price * product.quantity }}
+                ${{ item.product.price * item.quantity }}
               </div>
             </div>
           </div>
@@ -192,27 +186,29 @@
           Your personal data will be used only to process your order, support
           your experience throughout this website, and for other purposes
           described in our
-          <router-link class="text-primary" :to="{}">privacy policy</router-link
+          <router-link class="text-primary" :to="{ name: 'policy' }"
+            >privacy policy</router-link
           >. We never share it with third parties.
         </div>
         <div class="checkout-content__terms">
           <div class="checkout-content__checkbox check-radio">
             <Field
-              v-slot="{ field }"
+              v-slot="{ field, errors }"
               name="terms"
               type="checkbox"
-              :value="false"
+              :value="true"
             >
               <label class="check-radio__label">
                 <input
                   class="check-radio__input"
+                  :class="{ error: !!errors.length }"
                   type="checkbox"
                   name="terms"
                   v-bind="field"
-                  :value="false"
+                  :value="true"
                 />
                 I have read and agree to the website
-                <router-link :to="{}" class="text-primary">
+                <router-link :to="{ name: 'terms' }" class="text-primary">
                   terms and conditions</router-link
                 >
               </label>
@@ -221,8 +217,7 @@
         </div>
         <div class="checkout-content__submit">
           <hera-button
-            :isLink="true"
-            :link="{ name: 'payment' }"
+            type="submit"
             class="checkout-content__button primary"
             text="Pay with bitcoin"
           />
@@ -233,7 +228,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapState, mapActions } from "vuex";
 import { Form, Field, ErrorMessage } from "vee-validate";
 import HeraButton from "@/components/UI/Button.vue";
 
@@ -245,10 +240,52 @@ export default {
     ErrorMessage,
     HeraButton,
   },
+  data() {
+    return {
+      validationSchema: {
+        first_name: "required",
+        last_name: "required",
+        address: "required",
+        city: "required",
+        state: "required",
+        zip_code: "required",
+        phone_number: "required",
+        terms: (value) => {
+          if (value) {
+            return true;
+          }
+          return;
+        },
+      },
+    };
+  },
   computed: {
     ...mapGetters({
       cartItems: "cart/cartItems",
+      userAddress: "auth/userAddress",
+      currentUser: "auth/currentUser",
     }),
+    ...mapState({
+      isLoading: (state) => state.auth.isLoading,
+      error: (state) => state.auth.error,
+    }),
+  },
+  methods: {
+    ...mapActions({
+      getAddress: "auth/getAddress",
+      checkout: "order/checkout",
+    }),
+    onSubmitForm(params) {
+      this.checkout(params).then((res) =>
+        res ? this.$router.push("payment") : null
+      );
+    },
+  },
+  mounted() {
+    this.getAddress();
+  },
+  created() {
+    if (!this.cartItems.length) this.$router.push({ name: "cart" });
   },
 };
 </script>

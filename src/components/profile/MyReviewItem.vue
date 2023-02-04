@@ -8,7 +8,7 @@
         <div class="my-review-item__info">
           <h4 class="my-review-item__title">{{ review.title }}</h4>
           <p class="my-review-item__text">
-            {{ review.description }}
+            {{ review.text }}
           </p>
         </div>
       </div>
