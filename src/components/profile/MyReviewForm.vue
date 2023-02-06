@@ -113,7 +113,7 @@ export default {
     };
   },
   methods: {
-    onSubmitReview(values) {
+    onSubmitReview() {
       const formData = new FormData();
       formData.append("image", this.selectedImage);
       console.log(formData);
@@ -134,7 +134,7 @@ export default {
 
 <style lang="scss" scoped>
 .review-modal {
-  @apply max-lg: mt-40 mt-28;
+  @apply mt-28 max-lg:mt-40;
   // .review-modal__wrapper
 
   &__wrapper {
@@ -157,7 +157,7 @@ export default {
   // .review-modal-form__group
 
   &__group {
-    @apply last: mb-2.5 mb-0;
+    @apply mb-0 last:mb-2.5;
   }
 
   // .review-modal-form__input

@@ -94,7 +94,7 @@ export default {
 
 <style lang="scss" scoped>
 .features {
-  @apply mb-48 max-lg:mb-20;
+  @apply mb-48 -mt-44 max-lg:mb-20;
   // .features__container
 
   &__container {

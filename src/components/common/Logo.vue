@@ -2,7 +2,7 @@
   <div class="logo">
     <router-link :to="{ name: 'home' }" class="logo__link">
       <div class="logo__image logo-ibg-contain">
-        <img src="@/assets/img/logo.svg" alt="Hera Pharmaceuticals" />
+        <img src="@/assets/img/logo.png" alt="Hera Pharmaceuticals" />
       </div>
     </router-link>
   </div>
