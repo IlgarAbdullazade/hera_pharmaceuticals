@@ -39,13 +39,13 @@ export default {
   // .introduction__wrapper
 
   &__wrapper {
-    @apply flex min-h-[860px] items-center justify-center pb-48 pt-16;
+    @apply flex items-center justify-center pb-48 pt-16 lg:min-h-[860px];
   }
 
   // .introduction__content
 
   &__content {
-    @apply flex flex-col items-center justify-center;
+    @apply flex flex-col items-center justify-center max-lg:mt-20 max-lg:mb-32;
   }
 
   // .introduction__title
