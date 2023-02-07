@@ -47,8 +47,10 @@ export default {
   methods: {
     ...mapActions({
       searchProduct: "shop/products/searchProduct",
+      selectCategory: "categories/selectCategory",
     }),
     onSubmitForm(values) {
+      this.selectCategory("all");
       this.searchProduct(values).then(() => {
         this.$router.push({
           name: "products",
