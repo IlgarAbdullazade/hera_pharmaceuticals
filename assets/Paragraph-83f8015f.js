@@ -1,0 +1,1 @@
+import{_ as e,o as r,c as t,r as s,a as o,t as _}from"./index-3db6c8ff.js";const n={name:"HeraParagraph"},p={class:"paragraph"};function c(a,d,l,i,u,f){return r(),t("p",p,[s(a.$slots,"default",{},()=>[o(_(a.text),1)],!0)])}const h=e(n,[["render",c],["__scopeId","data-v-547640d0"]]);export{h as H};
