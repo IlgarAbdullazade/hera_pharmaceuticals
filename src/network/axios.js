@@ -2,7 +2,6 @@ import axios from "axios";
 import { getItem } from "@/helpers/persistanceStorage";
 import { AuthJWT } from "@/helpers/authJWT";
 import store from "@/store";
-import NProgress from "nprogress";
 
 axios.defaults.baseURL = import.meta.env.VITE_APP_BASEURL;
 
@@ -17,13 +16,11 @@ axios.interceptors.request.use((config) => {
   } else {
     store.dispatch("auth/logout");
   }
-  NProgress.start();
   return config;
 });
 
 axios.interceptors.response.use(
   (response) => {
-    NProgress.done();
     return response;
   },
   async (error) => {
@@ -42,7 +39,6 @@ axios.interceptors.response.use(
       await store.dispatch("auth/refreshToken");
       return axios(prevRequestConfig);
     }
-    NProgress.done();
     return Promise.reject(error);
   }
 );

@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { getItem } from "@/helpers/persistanceStorage";
+import NProgress from "nprogress";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -152,6 +153,17 @@ const router = createRouter({
       component: () => import("../views/NotFoundView.vue"),
     },
   ],
+});
+
+// Injection Progress
+router.beforeEach(() => {
+  if (!NProgress.isStarted()) {
+    NProgress.start();
+  }
+});
+
+router.afterEach(() => {
+  NProgress.done();
 });
 
 export default router;
