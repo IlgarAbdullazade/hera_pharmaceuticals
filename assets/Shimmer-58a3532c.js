@@ -1,0 +1,1 @@
+import{_ as s,o as a,c,d as _,B as r}from"./index-9cacae3f.js";const o={name:"HeraShimmer",props:{classes:{type:Array,default:[]}}},t={class:"shimmer"};function n(m,d,e,l,i,p){return a(),c("div",t,[_("div",{class:r(["shimmer__block",...e.classes])},null,2)])}const h=s(o,[["render",n],["__scopeId","data-v-f9fcd599"]]);export{h as H};
